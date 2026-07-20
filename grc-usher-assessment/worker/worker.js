@@ -36,6 +36,38 @@ export default {
         });
       }
 
+      // registration page + handler
+      if (p === "/register" && request.method === "GET") {
+        const r = await env.ASSETS.fetch(new Request(new URL("/register.html", url.origin)));
+        return new Response(r.body, { status: r.status, headers: { "content-type": "text/html;charset=utf-8", "cache-control": "no-store" } });
+      }
+      if (p === "/register" && request.method === "POST") {
+        const b = await request.json().catch(() => ({}));
+        if (!b || !b.email || !b.name) return json({ ok: false, error: "bad_payload" }, 400);
+        let contactId = null;
+        // Upsert GHL contact + registration tags (phase 2: needs secrets).
+        if (env.GHL_API_TOKEN && env.GHL_LOCATION_ID) {
+          try {
+            const up = await fetch("https://services.leadconnectorhq.com/contacts/upsert", {
+              method: "POST",
+              headers: { Authorization: "Bearer " + env.GHL_API_TOKEN, Version: "2021-07-28", "Content-Type": "application/json" },
+              body: JSON.stringify({ locationId: env.GHL_LOCATION_ID, name: b.name, email: b.email, phone: b.mobile, tags: ["usher-registered", "usher-selfie-captured"] })
+            });
+            const uj = await up.json();
+            contactId = (uj.contact && uj.contact.id) || uj.id || null;
+          } catch (e) {}
+        }
+        // Store the selfie in R2 (grc-usher-photos/<cid|email>.jpg).
+        if (b.selfie && env.R2) {
+          try {
+            const key = "grc-usher-photos/" + (contactId || b.email.replace(/[^a-z0-9]/gi, "_")) + ".jpg";
+            const bin = Uint8Array.from(atob(String(b.selfie).split(",").pop()), c => c.charCodeAt(0));
+            await env.R2.put(key, bin, { httpMetadata: { contentType: "image/jpeg" } });
+          } catch (e) {}
+        }
+        return json({ ok: true, contactId });
+      }
+
       if (p === "/section-submit" && request.method === "POST") {
         const b = await request.json().catch(() => ({}));
         if (!b || b.course !== "usher" || !SECTIONS[b.section]) return json({ ok: false, error: "bad_payload" }, 400);
