@@ -1,37 +1,37 @@
-# GRC Usher & Catcher — Serve Readiness Profile (build in progress)
+# GRC Usher & Catcher — Serve Readiness Profile
 
-A course-specific, reduced fork of the GRC DNA assessment, built for the
-**Usher & Catcher training** (and reusable for helper schools). Kept separate
-from the live GRC DNA engine.
+A course-specific, reduced fork of the GRC DNA assessment for the **Usher &
+Catcher training** (reusable for helper schools). Built as a **separate**
+system so the live GRC DNA engine and the shared grc-pdf-generator are never
+touched.
 
-## Status (as of pause for 3:20 PM resume)
+---
 
-Three question banks are **drafted and signed off** by John:
+## ▶ RESUME HERE (paused — continue next morning on "continue")
 
-| Part | File | Items | Status |
-|------|------|-------|--------|
-| 1 · Servant Heart Profile | `usher_part1_servant_heart.json` | 32 (8×4 temperament) | ✅ signed off |
-| 2 · Serve-Ready Check | `usher_part2_serve_ready.json` | 30 (6 domains × 5) | ✅ signed off |
-| 3 · Ministry Fit & Gifting | `usher_part3_ministry_fit.json` | 12 gifts, dual-axis | ✅ signed off |
+**Everything buildable is DONE, committed, and pushed to this branch / PR #4.**
+The only thing left is **deployment + GHL configuration**, which is blocked on a
+Claude-side tool-permission gate (not Cloudflare).
 
-## Confirmed decisions
+### Built & signed off
+- **Question banks** (signed off): `usher_part1_servant_heart.json` (32), `usher_part2_serve_ready.json` (30), `usher_part3_ministry_fit.json` (12 gifts).
+- **Assessment pages** on the real GRC DNA design system (Montserrat, teal, trait colours) + `GRC_ID` identity safeguard: `pages/u1.html`, `pages/u2.html`, `pages/u3.html`.
+- **Registration + selfie** page: `pages/register.html` (live camera capture + file fallback).
+- **Reports**: `reports/candidate_report.html`, `reports/pastoral_report.html` (both carry selfie + Part 1 role-lean + Part 3 gift→role map).
+- **Worker**: `worker/worker.js` — serves pages, `/register`, `/section-submit`, `/report/<cid>`, `/pastoral/<cid>?token=`, `/health`. Plus `wrangler.toml`, `migration.sql`, `DEPLOY.md`.
+- **GHL**: `GHL_SETUP.md` and the Word guide `GHL_Usher_Config_Guide.docx`.
 
-- **Separate Cloudflare worker** (`grc-usher-staging-worker` → `grc-usher-worker`), not an extension of the DNA worker.
-- Section names locked: *Servant Heart Profile / Serve-Ready Check / Ministry Fit & Gifting*.
-- Counts locked: S1 = 32, S2 = 30, S3 = 12 gifts.
-- **Reuse existing D1** with a `course = 'usher'` discriminator; reuse R2 with prefixes `grc-usher-reports/` and `grc-usher-participant/`.
-- Faithful to the live engine: same formats, scales and scoring logic as DNA S1/S2/S3, just reduced.
-- **Both reports** (candidate + pastoral) must surface the Part 1 temperament role-lean AND the Part 3 gift → usher-role map (Welcome / Floor-Head / Ministry Support-Catcher-Safety / Follow-Up).
-- Staging first, QA end-to-end, then promote to prod.
+### The ONE decision that unblocks go-live (deploy — step 6)
+Pick a route for `grc-usher-staging-worker`:
+1. **Allow the Cloudflare `execute` tool in the Claude client** → Claude deploys + runs `migration.sql` + verifies `/health` and the links. (Every `execute` call is currently auto-declined — that's the only blocker.)
+2. Paste a **scoped Cloudflare API token** (Workers/D1/R2 edit) → deploy via `npx wrangler`.
+3. Run the 3 commands in `worker/DEPLOY.md` yourself.
 
-## Next phase (build — resume 3:20 PM SAST)
+### Then (config John will do from the Word guide)
+- Create `usher_*` custom fields + `usher-*` tags in GHL; build the workflow with `{{contact.id}}` links.
+- Set `HOME_URL` (GHL usher-home page) in `wrangler.toml`.
+- Set worker secrets: `GHL_API_TOKEN`, `GHL_LOCATION_ID` (POa0egWeYo78ArtCaAi4), `PASTORAL_TOKEN`.
+- Then: QA on staging with a test contact → promote to `grc-usher-worker` (prod) → swap GHL links to the prod host.
 
-1. Stand up `grc-usher-staging-worker` (D1 discriminator + R2 prefixes).
-2. Build `u1`/`u2`/`u3` assessment pages from the JSON banks (brand-matched, mobile-first, autosave).
-3. Build candidate + pastoral report templates (role-lean + gift→role map required).
-4. GHL: `usher_*` custom fields, `usher-*` tags, workflow with **`{{contact.id}}` self-populating links**
-   (`/u1/{{contact.id}}`, `/u2/{{contact.id}}`, `/u3/{{contact.id}}`) — the permanent fix for the
-   mis-mapped-link problem from the DNA batch.
-5. QA on staging with a test contact → promote to `grc-usher-worker` (prod).
-
-Delegate mechanical build steps to subagents at an appropriate model level to conserve tokens.
+### Confirmed decisions
+Separate worker · S1=32 / S2=30 / S3=12 gifts · reuse existing D1 (isolated `usher_submission` table) + R2 (`grc-usher-photos/`, report prefixes) · faithful to the live engine, reduced · selfie captured at registration and shown on both reports · staging → QA → prod.
