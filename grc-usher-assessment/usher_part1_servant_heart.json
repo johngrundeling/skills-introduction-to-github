@@ -1,0 +1,27 @@
+{
+  "course": "usher",
+  "part": 1,
+  "name": "Servant Heart Profile",
+  "model": "GRC 4-temperament (DE/DR/EX/ST) — reduced from 120 to 32 items",
+  "format": "single-word self-descriptor",
+  "scale": { "1": "Not me", "2": "Usually not", "3": "Sometimes", "4": "Usually me", "5": "IS me" },
+  "items_per_group": 8,
+  "max_per_trait": 40,
+  "scoring": "Sum each group. Highest total = Primary type, second = Secondary. Profile code = PRIMARY-SECONDARY (e.g. ST-EX).",
+  "groups": {
+    "EX": { "name": "Expressive", "trait": "Outgoing, emotionally expressive, people-focused",
+      "words": ["Outgoing", "Enthusiastic", "Talkative", "Warm", "Engaging", "Cheerful", "Persuasive", "Spontaneous"] },
+    "DR": { "name": "Driver", "trait": "Assertive, results-oriented, task-focused leader",
+      "words": ["Assertive", "Decisive", "Ambitious", "Competitive", "Direct", "Determined", "Take-charge", "Goal-driven"] },
+    "DE": { "name": "Deep", "trait": "Thoughtful, introspective, analytical",
+      "words": ["Analytical", "Thoughtful", "Introspective", "Detailed", "Reflective", "Precise", "Cautious", "Principled"] },
+    "ST": { "name": "Steady", "trait": "Calm, supportive, relationship-oriented, reliable",
+      "words": ["Calm", "Patient", "Supportive", "Reliable", "Loyal", "Even-tempered", "Cooperative", "Dependable"] }
+  },
+  "role_lean_map": {
+    "EX": "Welcome Usher (first contact, warmth at the door)",
+    "DR": "Floor Usher / Head-Usher track (crowd flow, decisive direction)",
+    "DE": "Ministry Support / Safety (attentive, careful, boundary-aware)",
+    "ST": "Ministry Support (Catcher) & Follow-Up (calm, dependable, steady presence)"
+  }
+}

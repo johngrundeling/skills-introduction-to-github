@@ -1,0 +1,56 @@
+{
+  "course": "usher",
+  "part": 2,
+  "name": "Serve-Ready Check",
+  "model": "Maturity/readiness — reduced from 68 items / 12 domains to 30 items / 6 serving domains",
+  "instruction": "Answer based on your real, consistent pattern of life — not your best day, not your ideal self. Be honest before God.",
+  "format": "first-person statement, frequency-rated",
+  "scale": { "1": "Rarely / Never", "2": "Occasionally", "3": "Sometimes", "4": "Often", "5": "Consistently" },
+  "reverse_scoring": "Items marked R are scored 6 minus response.",
+  "items_per_domain": 5,
+  "max_raw": 150,
+  "output": {
+    "normalised_score": "0-100 (raw/150*100)",
+    "bands": { "Ready": ">=80", "Developing": "60-79", "Not-yet": "<60" },
+    "per_domain": "STRONG / DEVELOPING / ATTENTION label per domain",
+    "pastoral_flag": "Raised when Confidentiality or Submission domain < 60% (conversation required)"
+  },
+  "domains": {
+    "CI": { "name": "Character & Integrity", "items": [
+      "I keep my word even when it costs me something.",
+      "I am the same person in private that I am in public.",
+      "I tell the truth even when a small lie would be easier.",
+      "When I make a mistake, I own it rather than cover it.",
+      "R: I bend the rules when I think no one will notice."] },
+    "HT": { "name": "Humility & Teachability", "items": [
+      "I accept correction without becoming defensive.",
+      "I am quick to say 'I was wrong' when I am.",
+      "I actively ask others for feedback on how I serve.",
+      "I value other people's input above my own preferences.",
+      "R: I struggle to take instruction from people younger or less experienced than me."] },
+    "RF": { "name": "Reliability & Faithfulness", "items": [
+      "I arrive on time and ready for what I have committed to.",
+      "I finish what I start, even the unseen tasks.",
+      "People can depend on me to do what I said I would.",
+      "I show up consistently, not only when I feel like it.",
+      "R: I often cancel or drop commitments at the last minute."] },
+    "CD": { "name": "Confidentiality & Discretion", "items": [
+      "I keep private matters private, even from close friends.",
+      "I can be trusted with sensitive information.",
+      "I handle other people's struggles quietly and with care.",
+      "I resist the urge to share news that isn't mine to share.",
+      "R: I find it hard not to repeat something interesting I have heard."] },
+    "SA": { "name": "Submission to Authority", "items": [
+      "I willingly follow the leaders God has placed over me.",
+      "I support a decision once it is made, even if I disagreed.",
+      "I honour those in charge rather than undermine them.",
+      "I raise concerns respectfully and through the right channel.",
+      "R: I do things my own way even when I have been asked not to."] },
+    "ES": { "name": "Emotional Steadiness", "items": [
+      "I stay calm when situations become tense or chaotic.",
+      "I control my reactions rather than let my emotions lead.",
+      "Under pressure, others would describe me as steady.",
+      "I recover quickly when things do not go as planned.",
+      "R: I get flustered or short-tempered when things go wrong."] }
+  }
+}

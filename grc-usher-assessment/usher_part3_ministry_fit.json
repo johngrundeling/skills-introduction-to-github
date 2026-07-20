@@ -1,0 +1,38 @@
+{
+  "course": "usher",
+  "part": 3,
+  "name": "Ministry Fit & Gifting",
+  "model": "Dual-axis spiritual gifts — reduced from 27 gifts to 12 serving/helps-relevant gifts",
+  "reusable_for": ["usher schools", "helper schools"],
+  "format": "per gift: 1 Passion item + 1 Evidence item, each 1-5",
+  "scale": { "1": "Not at all", "2": "A little", "3": "Somewhat", "4": "Mostly", "5": "Strongly" },
+  "gift_total": "(Passion + Evidence) x 2, max 20 per gift",
+  "quadrant": {
+    "Confirmed Gift": "P>=4 and E>=4",
+    "Emerging (passion ahead of evidence)": "P>=4 and E<4",
+    "Latent (evidence without passion)": "P<4 and E>=4",
+    "Not primary": "P<4 and E<4"
+  },
+  "output": "Rank gifts by total; top gifts + quadrant label; map to usher role. Role map carried into BOTH candidate and pastoral reports.",
+  "role_map": {
+    "Welcome Usher": ["Hospitality", "Encouragement"],
+    "Floor / Head-Usher track": ["Administration", "Leadership"],
+    "Ministry Support (Catcher) / Safety": ["Faith", "Discernment", "Mercy", "Helps & Service"],
+    "Follow-Up Usher": ["Evangelism & Follow-Up", "Shepherding"],
+    "Undergirding support (any role)": ["Giving", "Intercession"]
+  },
+  "gifts": {
+    "Helps & Service":   { "P": "I genuinely enjoy practical tasks that support others behind the scenes.", "E": "People regularly rely on me to get practical things done, and I follow through." },
+    "Hospitality":       { "P": "I love making people feel welcome and at ease.", "E": "Others have told me they felt genuinely welcomed because of me." },
+    "Mercy":             { "P": "I am drawn to comfort people who are hurting or distressed.", "E": "People in pain often seek me out because I show real compassion." },
+    "Administration":    { "P": "I enjoy organising people, tasks and details so things run smoothly.", "E": "I have a track record of keeping things orderly and well-coordinated." },
+    "Leadership":        { "P": "I am energised by taking responsibility and guiding a team toward a goal.", "E": "Others naturally look to me to take the lead, and they follow." },
+    "Discernment":       { "P": "I pay close attention to what is really going on beneath the surface.", "E": "My read on people and situations has repeatedly proven accurate." },
+    "Encouragement":     { "P": "I love building others up and spurring them on.", "E": "People say they feel strengthened after talking with me." },
+    "Faith":             { "P": "I readily trust God for things others find hard to believe.", "E": "My confidence in God has held steady and encouraged others in hard times." },
+    "Giving":            { "P": "I find real joy in giving generously of my time and resources.", "E": "I consistently give beyond what is expected of me." },
+    "Intercession":      { "P": "I am drawn to pray earnestly and persistently for others.", "E": "I have kept praying for people and situations over long periods." },
+    "Shepherding":       { "P": "I care about walking alongside people over time as they grow.", "E": "I have faithfully supported and guided others in their journey." },
+    "Evangelism & Follow-Up": { "P": "I love connecting with newcomers and helping them take a next step.", "E": "I have helped new or unconnected people become settled and connected." }
+  }
+}
