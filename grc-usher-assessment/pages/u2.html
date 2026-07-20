@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRC Serve · Part 2 — Serve-Ready Check</title>
+<style>
+  :root{--green:#1f6b4c;--green-d:#164f38;--gold:#c9a24b;--ink:#1c2622;--muted:#6b7770;--bg:#f5f7f5;--card:#fff;--line:#e2e8e3}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  header{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;padding:22px 18px}
+  header h1{margin:0;font-size:19px}header p{margin:4px 0 0;font-size:13px;opacity:.9}
+  .wrap{max-width:640px;margin:0 auto;padding:16px}
+  .intro{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+  .intro b{color:var(--green-d)}
+  .scalekey{display:flex;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}
+  .scalekey span{background:#eef3ef;border-radius:6px;padding:3px 7px}
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+  .bar .track{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;width:0;background:var(--gold);transition:width .2s}
+  .bar small{display:block;text-align:center;color:var(--muted);margin-top:4px;font-size:12px}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+  .q .stmt{font-size:16px;font-weight:600;margin-bottom:10px}
+  .opts{display:flex;justify-content:space-between;gap:6px}
+  .opts label{flex:1;text-align:center;font-size:11px;color:var(--muted);cursor:pointer}
+  .opts input{display:block;margin:0 auto 3px;width:22px;height:22px;accent-color:var(--green)}
+  .opts label.sel{color:var(--green-d);font-weight:700}
+  button.submit{width:100%;padding:15px;border:0;border-radius:12px;background:var(--green);color:#fff;font-size:16px;font-weight:600;margin:16px 0 40px}
+  button.submit:disabled{background:#9db8ab}
+  .result{background:var(--card);border:2px solid var(--green);border-radius:16px;padding:20px;margin:14px 0}
+  .result .band{font-size:28px;font-weight:800;color:var(--green-d)}
+  .dom{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:7px 0;font-size:14px}
+  .foot{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<header><h1>GRC Serve — Usher &amp; Catcher</h1><p>Part 2 · Serve-Ready Check</p></header>
+<div class="wrap">
+  <div class="intro">
+    Answer based on your <b>real, consistent pattern of life</b> — not your best day, not your ideal self. Be honest before God.
+    30 statements, about 5 minutes.
+    <div class="scalekey"><span>1 Rarely/Never</span><span>2 Occasionally</span><span>3 Sometimes</span><span>4 Often</span><span>5 Consistently</span></div>
+  </div>
+  <div class="bar"><div class="track"><div class="fill" id="fill"></div></div><small id="prog">0 of 30</small></div>
+  <form id="form"></form>
+  <button class="submit" id="submit" disabled>See my readiness</button>
+  <div id="result"></div>
+  <div class="foot">Gateway Revival Church — Benoni · Ministry Training</div>
+</div>
+<script>
+const DOMAINS={
+ CI:{name:"Character & Integrity",items:[["I keep my word even when it costs me something.",0],["I am the same person in private that I am in public.",0],["I tell the truth even when a small lie would be easier.",0],["When I make a mistake, I own it rather than cover it.",0],["I bend the rules when I think no one will notice.",1]]},
+ HT:{name:"Humility & Teachability",items:[["I accept correction without becoming defensive.",0],["I am quick to say 'I was wrong' when I am.",0],["I actively ask others for feedback on how I serve.",0],["I value other people's input above my own preferences.",0],["I struggle to take instruction from people younger or less experienced than me.",1]]},
+ RF:{name:"Reliability & Faithfulness",items:[["I arrive on time and ready for what I have committed to.",0],["I finish what I start, even the unseen tasks.",0],["People can depend on me to do what I said I would.",0],["I show up consistently, not only when I feel like it.",0],["I often cancel or drop commitments at the last minute.",1]]},
+ CD:{name:"Confidentiality & Discretion",items:[["I keep private matters private, even from close friends.",0],["I can be trusted with sensitive information.",0],["I handle other people's struggles quietly and with care.",0],["I resist the urge to share news that isn't mine to share.",0],["I find it hard not to repeat something interesting I have heard.",1]]},
+ SA:{name:"Submission to Authority",items:[["I willingly follow the leaders God has placed over me.",0],["I support a decision once it is made, even if I disagreed.",0],["I honour those in charge rather than undermine them.",0],["I raise concerns respectfully and through the right channel.",0],["I do things my own way even when I have been asked not to.",1]]},
+ ES:{name:"Emotional Steadiness",items:[["I stay calm when situations become tense or chaotic.",0],["I control my reactions rather than let my emotions lead.",0],["Under pressure, others would describe me as steady.",0],["I recover quickly when things do not go as planned.",0],["I get flustered or short-tempered when things go wrong.",1]]}
+};
+let ITEMS=[];
+Object.keys(DOMAINS).forEach(d=>DOMAINS[d].items.forEach((it,i)=>ITEMS.push({d,t:it[0],r:it[1],k:d+i})));
+ITEMS=ITEMS.map((it,i)=>({...it,o:(i*11+5)%ITEMS.length})).sort((a,b)=>a.o-b.o);
+const CID=(location.pathname.match(/\/u2\/([A-Za-z0-9]+)/)||[])[1]||new URLSearchParams(location.search).get("contactId")||"preview";
+const SKEY="grc_usher_p2_"+CID, ans=JSON.parse(localStorage.getItem(SKEY)||"{}");
+const form=document.getElementById("form");
+ITEMS.forEach(it=>{
+  const q=document.createElement("div");q.className="q";
+  q.innerHTML='<div class="stmt">'+it.t+'</div><div class="opts">'+
+    [1,2,3,4,5].map(v=>'<label><input type="radio" name="'+it.k+'" value="'+v+'">'+v+'</label>').join('')+'</div>';
+  form.appendChild(q);
+  if(ans[it.k]){const r=q.querySelector('input[value="'+ans[it.k]+'"]');if(r){r.checked=true;r.closest('label').classList.add('sel');}}
+});
+function refresh(){const done=Object.keys(ans).length;
+  document.getElementById("prog").textContent=done+" of "+ITEMS.length;
+  document.getElementById("fill").style.width=(done/ITEMS.length*100)+"%";
+  document.getElementById("submit").disabled=done<ITEMS.length;}
+form.addEventListener("change",e=>{if(e.target.name){ans[e.target.name]=+e.target.value;localStorage.setItem(SKEY,JSON.stringify(ans));
+  e.target.closest(".opts").querySelectorAll("label").forEach(l=>l.classList.remove("sel"));
+  e.target.closest("label").classList.add("sel");refresh();}});
+refresh();
+document.getElementById("submit").addEventListener("click",async()=>{
+  const dom={};let raw=0;
+  Object.keys(DOMAINS).forEach(d=>{let s=0;DOMAINS[d].items.forEach((it,i)=>{let v=ans[d+i]||0;if(it[1])v=6-v;s+=v;});dom[d]=s;raw+=s;});
+  const norm=Math.round(raw/150*100);
+  const band=norm>=80?"Ready":norm>=60?"Developing":"Not-yet";
+  const flag=(dom.CD/25*100<60)||(dom.SA/25*100<60);
+  let rows=Object.keys(DOMAINS).map(d=>{const p=Math.round(dom[d]/25*100);const lbl=p>=75?"Strong":p>=55?"Developing":"Attention";
+    return '<div class="dom"><span>'+DOMAINS[d].name+'</span><span>'+p+'% · '+lbl+'</span></div>';}).join('');
+  document.getElementById("result").innerHTML='<div class="result"><div class="band">'+band+'</div>'+
+    '<div>Overall readiness score: <b>'+norm+'/100</b></div>'+rows+
+    (flag?'<p style="color:#a3400f;margin-top:12px"><b>Pastoral note:</b> a conversation is recommended before active service.</p>':'')+
+    '<p style="color:var(--muted);font-size:13px;margin-top:12px">Your full report follows after all three parts are completed.</p></div>';
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+  try{await fetch("/submit/u2",{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({contactId:CID,domains:dom,normalised:norm,band:band,pastoral_flag:flag})});}catch(e){}
+});
+</script>
+</body>
+</html>

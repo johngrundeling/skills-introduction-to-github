@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRC Serve · Part 3 — Ministry Fit &amp; Gifting</title>
+<style>
+  :root{--green:#1f6b4c;--green-d:#164f38;--gold:#c9a24b;--ink:#1c2622;--muted:#6b7770;--bg:#f5f7f5;--card:#fff;--line:#e2e8e3}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  header{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;padding:22px 18px}
+  header h1{margin:0;font-size:19px}header p{margin:4px 0 0;font-size:13px;opacity:.9}
+  .wrap{max-width:640px;margin:0 auto;padding:16px}
+  .intro{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+  .intro b{color:var(--green-d)}
+  .scalekey{display:flex;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}
+  .scalekey span{background:#eef3ef;border-radius:6px;padding:3px 7px}
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+  .bar .track{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;width:0;background:var(--gold);transition:width .2s}
+  .bar small{display:block;text-align:center;color:var(--muted);margin-top:4px;font-size:12px}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+  .q .tag{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);font-weight:700}
+  .q .stmt{font-size:16px;font-weight:600;margin:4px 0 10px}
+  .opts{display:flex;justify-content:space-between;gap:6px}
+  .opts label{flex:1;text-align:center;font-size:11px;color:var(--muted);cursor:pointer}
+  .opts input{display:block;margin:0 auto 3px;width:22px;height:22px;accent-color:var(--green)}
+  .opts label.sel{color:var(--green-d);font-weight:700}
+  button.submit{width:100%;padding:15px;border:0;border-radius:12px;background:var(--green);color:#fff;font-size:16px;font-weight:600;margin:16px 0 40px}
+  button.submit:disabled{background:#9db8ab}
+  .result{background:var(--card);border:2px solid var(--green);border-radius:16px;padding:20px;margin:14px 0}
+  .gift{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:8px 0;font-size:14px}
+  .gift b{color:var(--green-d)}
+  .role{background:#eef3ef;border-radius:10px;padding:12px;margin-top:12px}
+  .foot{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<header><h1>GRC Serve — Usher &amp; Catcher</h1><p>Part 3 · Ministry Fit &amp; Gifting</p></header>
+<div class="wrap">
+  <div class="intro">
+    For each statement, rate how true it is of you. Some ask about your <b>passion</b> (what you love),
+    others about your <b>evidence</b> (what has actually shown up over time). 24 statements, about 4 minutes.
+    <div class="scalekey"><span>1 Not at all</span><span>2 A little</span><span>3 Somewhat</span><span>4 Mostly</span><span>5 Strongly</span></div>
+  </div>
+  <div class="bar"><div class="track"><div class="fill" id="fill"></div></div><small id="prog">0 of 24</small></div>
+  <form id="form"></form>
+  <button class="submit" id="submit" disabled>See my ministry fit</button>
+  <div id="result"></div>
+  <div class="foot">Gateway Revival Church — Benoni · Ministry Training</div>
+</div>
+<script>
+const GIFTS={
+ "Helps & Service":["I genuinely enjoy practical tasks that support others behind the scenes.","People regularly rely on me to get practical things done, and I follow through."],
+ "Hospitality":["I love making people feel welcome and at ease.","Others have told me they felt genuinely welcomed because of me."],
+ "Mercy":["I am drawn to comfort people who are hurting or distressed.","People in pain often seek me out because I show real compassion."],
+ "Administration":["I enjoy organising people, tasks and details so things run smoothly.","I have a track record of keeping things orderly and well-coordinated."],
+ "Leadership":["I am energised by taking responsibility and guiding a team toward a goal.","Others naturally look to me to take the lead, and they follow."],
+ "Discernment":["I pay close attention to what is really going on beneath the surface.","My read on people and situations has repeatedly proven accurate."],
+ "Encouragement":["I love building others up and spurring them on.","People say they feel strengthened after talking with me."],
+ "Faith":["I readily trust God for things others find hard to believe.","My confidence in God has held steady and encouraged others in hard times."],
+ "Giving":["I find real joy in giving generously of my time and resources.","I consistently give beyond what is expected of me."],
+ "Intercession":["I am drawn to pray earnestly and persistently for others.","I have kept praying for people and situations over long periods."],
+ "Shepherding":["I care about walking alongside people over time as they grow.","I have faithfully supported and guided others in their journey."],
+ "Evangelism & Follow-Up":["I love connecting with newcomers and helping them take a next step.","I have helped new or unconnected people become settled and connected."]
+};
+const ROLEMAP={"Welcome Usher":["Hospitality","Encouragement"],"Floor / Head-Usher track":["Administration","Leadership"],
+ "Ministry Support (Catcher) / Safety":["Faith","Discernment","Mercy","Helps & Service"],
+ "Follow-Up Usher":["Evangelism & Follow-Up","Shepherding"],"Undergirding support (any role)":["Giving","Intercession"]};
+let ITEMS=[];
+Object.keys(GIFTS).forEach((g,gi)=>{ITEMS.push({g,axis:"P",t:GIFTS[g][0],k:"g"+gi+"P"});ITEMS.push({g,axis:"E",t:GIFTS[g][1],k:"g"+gi+"E"});});
+ITEMS=ITEMS.map((it,i)=>({...it,o:(i*13+4)%ITEMS.length})).sort((a,b)=>a.o-b.o);
+const CID=(location.pathname.match(/\/u3\/([A-Za-z0-9]+)/)||[])[1]||new URLSearchParams(location.search).get("contactId")||"preview";
+const SKEY="grc_usher_p3_"+CID, ans=JSON.parse(localStorage.getItem(SKEY)||"{}");
+const form=document.getElementById("form");
+ITEMS.forEach(it=>{
+  const q=document.createElement("div");q.className="q";
+  q.innerHTML='<div class="tag">'+(it.axis==="P"?"What I love":"What has shown up")+'</div><div class="stmt">'+it.t+'</div><div class="opts">'+
+    [1,2,3,4,5].map(v=>'<label><input type="radio" name="'+it.k+'" value="'+v+'">'+v+'</label>').join('')+'</div>';
+  form.appendChild(q);
+  if(ans[it.k]){const r=q.querySelector('input[value="'+ans[it.k]+'"]');if(r){r.checked=true;r.closest('label').classList.add('sel');}}
+});
+function refresh(){const done=Object.keys(ans).length;
+  document.getElementById("prog").textContent=done+" of "+ITEMS.length;
+  document.getElementById("fill").style.width=(done/ITEMS.length*100)+"%";
+  document.getElementById("submit").disabled=done<ITEMS.length;}
+form.addEventListener("change",e=>{if(e.target.name){ans[e.target.name]=+e.target.value;localStorage.setItem(SKEY,JSON.stringify(ans));
+  e.target.closest(".opts").querySelectorAll("label").forEach(l=>l.classList.remove("sel"));
+  e.target.closest("label").classList.add("sel");refresh();}});
+refresh();
+document.getElementById("submit").addEventListener("click",async()=>{
+  const res={};Object.keys(GIFTS).forEach((g,gi)=>{const P=ans["g"+gi+"P"]||0,E=ans["g"+gi+"E"]||0;
+    let quad=P>=4&&E>=4?"Confirmed":P>=4?"Emerging":E>=4?"Latent":"Not primary";
+    res[g]={P,E,total:(P+E)*2,quad};});
+  const top=Object.keys(res).sort((a,b)=>res[b].total-res[a].total).slice(0,5);
+  // best-fit role = role whose gifts have the highest average total
+  let bestRole="",bestAvg=-1;
+  Object.keys(ROLEMAP).forEach(r=>{const gs=ROLEMAP[r];const avg=gs.reduce((s,g)=>s+res[g].total,0)/gs.length;if(avg>bestAvg){bestAvg=avg;bestRole=r;}});
+  let rows=top.map(g=>'<div class="gift"><span>'+g+'</span><span><b>'+res[g].total+'/20</b> · '+res[g].quad+'</span></div>').join('');
+  document.getElementById("result").innerHTML='<div class="result"><div style="font-size:18px;font-weight:800;color:var(--green-d)">Your top serving gifts</div>'+rows+
+    '<div class="role"><b>Best-fit usher role:</b><br>'+bestRole+'</div>'+
+    '<p style="color:var(--muted);font-size:13px;margin-top:12px">Your full report — combining all three parts — follows after review.</p></div>';
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+  try{await fetch("/submit/u3",{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({contactId:CID,gifts:res,top:top,role_fit:bestRole})});}catch(e){}
+});
+</script>
+</body>
+</html>
