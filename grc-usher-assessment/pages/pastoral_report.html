@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRC Serve — Pastoral Review (Confidential)</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Pastoral report — CONFIDENTIAL. Placeholders {{...}} filled by generator. */
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--blk:#231F20;--gry:#6B6B6B;--glt:#F5F5F5;--wht:#fff;--tdk:#547878;--tdkr:#3B6261;--warn:#a3400f;--fn:'Montserrat',sans-serif}
+  body{font-family:var(--fn);color:var(--blk);background:#EEF3F4;padding:16px}
+  .pg{max-width:720px;margin:0 auto;background:var(--wht);border-radius:16px;overflow:hidden;box-shadow:0 4px 28px rgba(84,120,120,.14)}
+  .hero{background:var(--blk);color:#fff;padding:22px 24px;display:flex;align-items:center;gap:16px}
+  .hero img{width:76px;height:76px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.5)}
+  .hero h1{font-size:1.1rem;font-weight:800}
+  .hero .sub{opacity:.85;font-size:.72rem;margin-top:3px}
+  .conf{background:var(--warn);color:#fff;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;text-align:center;padding:6px}
+  .sec{padding:18px 24px;border-bottom:1px solid #EEF3F4}
+  .sec h2{font-size:.7rem;text-transform:uppercase;letter-spacing:.8px;color:var(--tdk);font-weight:800;margin-bottom:10px}
+  .row{display:flex;justify-content:space-between;padding:6px 0;font-size:.86rem;border-top:1px solid #F1F5F6}
+  .flag{background:#FFF3EC;border:1px solid #F0C9AE;border-radius:10px;padding:12px;color:var(--warn);font-size:.85rem;font-weight:600;margin-top:10px}
+  .action{background:var(--glt);border-radius:10px;padding:14px;font-size:.9rem;margin-top:8px}
+  .action b{color:var(--tdkr)}
+  .foot{text-align:center;color:var(--gry);font-size:.68rem;padding:14px}
+</style>
+</head>
+<body>
+<div class="pg">
+  <div class="conf">Confidential — For Pastoral / Head-Usher Review Only</div>
+  <div class="hero">
+    <img src="{{selfie_url}}" alt="{{name}}">
+    <div><h1>{{name}}</h1><div class="sub">{{mobile}} · {{email}} · {{date}}</div></div>
+  </div>
+
+  <div class="sec">
+    <h2>Part 1 · Servant Heart Profile</h2>
+    <div class="row"><span>Profile code</span><span><b>{{s1_code}}</b> — {{s1_primary}}/{{s1_secondary}}</span></div>
+    <div class="row"><span>Trait totals</span><span>{{s1_trait_totals}}</span></div>
+    <div class="row"><span>Temperament role-lean</span><span>{{s1_role_lean}}</span></div>
+  </div>
+
+  <div class="sec">
+    <h2>Part 2 · Serve-Ready Check</h2>
+    <div class="row"><span>Readiness</span><span><b>{{s2_band}}</b> · {{s2_score}}/100</span></div>
+    {{s2_domain_rows}}
+    {{s2_pastoral_flag_block}}
+  </div>
+
+  <div class="sec">
+    <h2>Part 3 · Ministry Fit &amp; Gifting</h2>
+    {{s3_gift_rows}}
+    <div class="row"><span>Best-fit usher role</span><span><b>{{role_fit}}</b></span></div>
+  </div>
+
+  <div class="sec">
+    <h2>Recommended Action</h2>
+    <div class="action">
+      <b>Placement:</b> {{recommended_role}}<br>
+      <b>Pastoral action:</b> {{pastoral_action}}
+    </div>
+  </div>
+  <div class="foot">GRC Ministry Training · Usher &amp; Catcher · Pastoral Review · Do Not Distribute</div>
+</div>
+</body>
+</html>
