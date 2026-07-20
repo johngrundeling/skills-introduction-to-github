@@ -1,0 +1,30 @@
+name = "grc-usher-staging-worker"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Static assets = the three assessment pages (served at /u1|/u2|/u3).
+[assets]
+directory = "../pages"
+binding = "ASSETS"
+
+# Reuse the existing GRC D1 database (same DB as the DNA engine), but the
+# worker only reads/writes its OWN usher_submission table (see migration.sql).
+# Fill database_name/database_id at deploy time (from `wrangler d1 list`
+# or the CF dashboard) — left as placeholders so nothing live is assumed.
+[[d1_databases]]
+binding = "DB"
+database_name = "REPLACE_WITH_GRC_D1_NAME"
+database_id   = "REPLACE_WITH_GRC_D1_ID"
+
+# Selfie storage prefix lives in the existing GRC R2 bucket (grc-usher-photos/).
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "REPLACE_WITH_GRC_R2_BUCKET"
+
+[vars]
+ENVIRONMENT = "staging"
+COURSE = "usher"
+
+# GHL write-back (phase 2) needs a secret, set out-of-band:
+#   wrangler secret put GHL_API_TOKEN
+#   wrangler secret put GHL_LOCATION_ID
