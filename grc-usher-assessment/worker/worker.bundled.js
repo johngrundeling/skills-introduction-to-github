@@ -4,6 +4,9 @@ const PAGES = {"u1.html":"<!doctype html>\n<html lang=\"en\">\n<head>\n<meta cha
 // but self-contained (no ASSETS binding), so it deploys as a single module.
 const SECTIONS = { u1: "u1.html", u2: "u2.html", u3: "u3.html" };
 const ROLE_LEAN = { EX: "Welcome Usher", DR: "Floor / Head-Usher track", DE: "Ministry Support / Safety", ST: "Ministry Support (Catcher) & Follow-Up" };
+const ROLE_TAG = { "Welcome Usher": "usher-role-welcome", "Floor / Head-Usher track": "usher-role-floor", "Ministry Support (Catcher) / Safety": "usher-role-ministry-support", "Follow-Up Usher": "usher-role-followup", "Undergirding support (any role)": "" };
+const GHL_BASE = "https://services.leadconnectorhq.com";
+const SUMMARY_FIELD_ID = "Y9fbY2JOAdxPagXxmtVB"; // the "usher_*" contact field
 
 export default {
   async fetch(request, env) {
@@ -49,6 +52,20 @@ export default {
         const cid = String(b.contactId || "").replace(/[^A-Za-z0-9]/g, "") || null;
         await env.DB.prepare("INSERT INTO usher_submission (contact_id, section, payload, created_at) VALUES (?1,?2,?3,?4)")
           .bind(cid, b.section, JSON.stringify(b), Date.now()).run();
+        // Carry through to GHL (never blocks the save — D1 is source of truth).
+        if (env.GHL_API_TOKEN && cid) {
+          try {
+            await ghlAddTags(env, cid, ["usher-" + b.section + "-complete"]);
+            const secs = await env.DB.prepare("SELECT DISTINCT section FROM usher_submission WHERE contact_id=?1").bind(cid).all();
+            const have = new Set((secs.results || []).map(r => r.section));
+            if (have.has("u1") && have.has("u2") && have.has("u3")) {
+              const u3 = await latest(env, cid, "u3");
+              const roleTag = u3 && ROLE_TAG[u3.role_fit] ? [ROLE_TAG[u3.role_fit]] : [];
+              await ghlAddTags(env, cid, ["usher-cleared"].concat(roleTag));
+              await ghlWriteSummary(env, cid);
+            }
+          } catch (e) {}
+        }
         return json({ ok: true, home: env.HOME_URL || null });
       }
 
@@ -86,9 +103,24 @@ async function renderReport(env, cid, kind) {
   const [u1, u2, u3] = await Promise.all([latest(env, cid, "u1"), latest(env, cid, "u2"), latest(env, cid, "u3")]);
   if (!u1 && !u2 && !u3) return html("<body style='font-family:sans-serif;padding:32px;text-align:center'><h2>Report not ready</h2><p>This profile has not completed the assessment yet.</p></body>", 404);
   const tpl = PAGES[kind === "pastoral" ? "pastoral_report.html" : "candidate_report.html"];
-  const selfie = (env.R2_PUBLIC_BASE || "") + "/grc-usher-photos/" + cid + ".jpg";
+  let selfie = (env.R2_PUBLIC_BASE || "") + "/grc-usher-photos/" + cid + ".jpg";
+  let name = "", mobile = "", email = "";
+  if (env.GHL_API_TOKEN) {
+    try {
+      const r = await fetch(GHL_BASE + "/contacts/" + cid, { headers: ghlHeaders(env) });
+      if (r.ok) {
+        const c = (await r.json()).contact || {};
+        name = c.contactName || ((c.firstName || "") + " " + (c.lastName || "")).trim();
+        mobile = c.phone || ""; email = c.email || "";
+        if (Array.isArray(c.customFields)) {
+          const pf = c.customFields.find(function (f) { return /photo|selfie/i.test(String(f.value || "")) && /^https?:/.test(String(f.value || "")); });
+          if (pf) selfie = pf.value;
+        }
+      }
+    } catch (e) {}
+  }
   const V = {
-    name: "", mobile: "", email: "", date: new Date().toISOString().slice(0, 10), selfie_url: selfie,
+    name: name, mobile: mobile, email: email, date: new Date().toISOString().slice(0, 10), selfie_url: selfie,
     s1_code: u1 ? u1.code : "—", s1_primary: u1 ? u1.primary : "", s1_secondary: u1 ? u1.secondary : "",
     s1_how_you_serve: u1 ? servingLine(u1.primary) : "", s1_role_lean: u1 ? ROLE_LEAN[u1.primary] : "",
     s1_trait_totals: u1 ? Object.entries(u1.scores).map(function (e) { return e[0] + ":" + e[1]; }).join("  ") : "",
@@ -109,3 +141,18 @@ function servingLine(p) { return ({ EX: "You serve best where people are met and
 function bandNote(b) { return b === "Ready" ? "You show strong, consistent readiness to serve." : b === "Developing" ? "You are growing well — a few areas will strengthen with support." : "Some areas need growth before active service; your pastor will walk with you."; }
 function json(o, s) { return new Response(JSON.stringify(o, null, 2), { status: s || 200, headers: { "content-type": "application/json", "cache-control": "no-store" } }); }
 function html(h, s) { return new Response(h, { status: s || 200, headers: { "content-type": "text/html;charset=utf-8", "cache-control": "no-store" } }); }
+
+// ── GHL write-through helpers ────────────────────────────────────────────────
+function ghlHeaders(env) { return { Authorization: "Bearer " + env.GHL_API_TOKEN, Version: "2021-07-28", "Content-Type": "application/json" }; }
+async function ghlAddTags(env, cid, tags) {
+  await fetch(GHL_BASE + "/contacts/" + cid + "/tags", { method: "POST", headers: ghlHeaders(env), body: JSON.stringify({ tags: tags }) });
+}
+async function ghlWriteSummary(env, cid) {
+  const [u1, u2, u3] = await Promise.all([latest(env, cid, "u1"), latest(env, cid, "u2"), latest(env, cid, "u3")]);
+  const parts = [];
+  if (u1) parts.push("S1 " + u1.code);
+  if (u2) parts.push("S2 " + u2.band + " " + u2.normalised + "/100");
+  if (u3) parts.push("S3 " + (u3.role_fit || "") + " [" + (u3.top || []).slice(0, 3).join(", ") + "]");
+  const summary = "Usher assessment complete — " + parts.join(" | ");
+  await fetch(GHL_BASE + "/contacts/" + cid, { method: "PUT", headers: ghlHeaders(env), body: JSON.stringify({ customFields: [{ id: SUMMARY_FIELD_ID, field_value: summary }] }) });
+}
