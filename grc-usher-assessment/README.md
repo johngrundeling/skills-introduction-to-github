@@ -7,11 +7,17 @@ touched.
 
 ---
 
-## ▶ RESUME HERE (paused — continue next morning on "continue")
+## ▶ STATUS — DEPLOYED TO STAGING & QA-PASSED
 
-**Everything buildable is DONE, committed, and pushed to this branch / PR #4.**
-The only thing left is **deployment + GHL configuration**, which is blocked on a
-Claude-side tool-permission gate (not Cloudflare).
+`grc-usher-staging-worker` is **live** at `https://grc-usher-staging-worker.johng-5ff.workers.dev`
+(D1 `grc-dna-staging` / isolated `usher_submission` table, R2 `grc-dna-staging`).
+QA passed: short-link 302, u1/u2/u3 served, `/section-submit`→D1, combined
+`/report/<cid>` renders, `/pastoral/<cid>?token=` gated. Test rows cleaned.
+
+**Remaining to go fully live:**
+1. GHL config from `GHL_Usher_Config_Guide.docx` (fields, tags, workflow, registration form).
+2. Worker secrets: `GHL_API_TOKEN`, `GHL_LOCATION_ID`, `PASTORAL_TOKEN`; and set `HOME_URL`.
+3. Promote to prod (`grc-usher-worker`) and swap GHL links to the prod host.
 
 ### Built & signed off
 - **Question banks** (signed off): `usher_part1_servant_heart.json` (32), `usher_part2_serve_ready.json` (30), `usher_part3_ministry_fit.json` (12 gifts).
