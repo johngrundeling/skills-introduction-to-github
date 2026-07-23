@@ -7,7 +7,20 @@ touched.
 
 ---
 
-## ▶ STATUS — DEPLOYED TO STAGING & QA-PASSED
+## ▶ STATUS — LIVE, GHL WRITE-THROUGH VERIFIED
+
+The worker is deployed with all four secrets set (`GHL_API_TOKEN`,
+`GHL_LOCATION_ID`, `HOME_URL`, `PASTORAL_TOKEN`) and GHL write-through is
+**verified end-to-end** against a QA contact: submitting u1/u2/u3 added the
+`usher-u1/u2/u3-complete` + `usher-cleared` + `usher-role-*` tags, wrote the
+results summary into the `usher_*` field, and the report rendered the member
+name from GHL. Pastoral link gated correctly (200 with token, 403 without).
+Dashboard buttons live on staging host. Optional: promote to a dedicated
+`grc-usher-worker` prod host and swap the dashboard/link host.
+
+---
+
+## (history) DEPLOYED TO STAGING & QA-PASSED
 
 `grc-usher-staging-worker` is **live** at `https://grc-usher-staging-worker.johng-5ff.workers.dev`
 (D1 `grc-dna-staging` / isolated `usher_submission` table, R2 `grc-dna-staging`).
