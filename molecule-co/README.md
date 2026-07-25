@@ -8,8 +8,15 @@ used on the Pure Performance Labs invoices, so invoice line items read consisten
 
 | File | Purpose |
 |------|---------|
-| `molecule-co-products.csv` | 52 products ready to upload (GHL → Payments → Products → Import). |
+| `molecule-co-products-GHL.csv` | **Upload this.** 52 products in GHL's exact 29-column Shopify-style import template (GHL → Payments → Products → Import). |
+| `molecule-co-products.csv` | Human-readable reference (8 columns): name, SKU, category, description, price, image URL. |
 | `images/` | 48 product images (one per catalogue item), named by product code. |
+
+## GHL import format notes
+
+- The upload file matches GHL's 29-column template exactly (`Handle, Title, Body (HTML), … SEO Description`). `Title` = `CODE - Name`, `SKU` = product code, `Body (HTML)` = description, `Image Src` = image URL. Single-variant products use the Shopify convention `Option1 Name = Title`, `Option1 Value = Default Title`.
+- **Price is numeric** (e.g. `750.00`), not `R750.00`. GHL's `Variant Price` column is numeric — a non-numeric value fails validation. The Rand symbol is applied automatically by the location's ZAR currency setting.
+- **Image Src uses the public GitHub raw URLs.** GHL's importer fetches external image URLs on upload. If you want the images living in the GHL **Media Storage** (`storage.googleapis.com/msgsndr/<location>/media/…`) instead, the 48 images must first be uploaded to that location's Media Library, then the URLs swapped — that step needs GHL Media access this integration doesn't expose.
 
 ## Product code style (decoded from the invoice)
 
