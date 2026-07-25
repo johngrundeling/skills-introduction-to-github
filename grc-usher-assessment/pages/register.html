@@ -100,7 +100,7 @@ $("go").addEventListener("click",async()=>{
   $("go").disabled=true;$("status").textContent="Setting up your profile…";
   const payload={course:"usher",name:$("name").value.trim(),mobile:$("mobile").value.trim(),email:$("email").value.trim().toLowerCase(),selfie:selfie};
   try{
-    const r=await fetch("https://grc-usher-staging-worker.johng-5ff.workers.dev/register",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+    const r=await fetch("/register",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
     const d=await r.json();
     if(d&&d.contactId){location.href="/u1/"+d.contactId;return;}
     $("status").textContent="Registered — continue to Part 1.";location.href="/u1";
