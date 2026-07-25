@@ -61,7 +61,7 @@
 </div>
 <script>
 const GRC_ID=(function(){try{const q=new URLSearchParams(location.search);
-  let cid=(location.pathname.match(/\/u2\/([A-Za-z0-9]+)/)||[])[1]||q.get('contactId')||'';
+  let cid=(location.pathname.match(/\/u2\/([A-Za-z0-9]+)/)||[])[1]||q.get('contactId')||q.get('contact_id')||'';
   const em=(q.get('email')||'').trim().toLowerCase();
   if(cid){localStorage.setItem('grc_cid',cid);if(em)localStorage.setItem('grc_cid_email',em);}
   return{fromUrl:!!cid,cid:cid||localStorage.getItem('grc_cid')||'',email:em||localStorage.getItem('grc_cid_email')||''};

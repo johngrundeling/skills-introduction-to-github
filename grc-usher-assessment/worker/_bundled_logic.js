@@ -15,7 +15,7 @@ export default {
       let m = p.match(/^\/u\/([A-Za-z0-9]+)\/?$/);
       if (m) return Response.redirect(url.origin + "/u1/" + m[1], 302);
 
-      m = p.match(/^\/(u1|u2|u3)(?:\/([A-Za-z0-9]+))?\/?$/);
+      m = p.match(/^\/(u1|u2|u3)(\/.*)?$/);
       if (m) return html(PAGES[SECTIONS[m[1]]]);
 
       if (p === "/register" && request.method === "GET") return html(PAGES["register.html"]);
