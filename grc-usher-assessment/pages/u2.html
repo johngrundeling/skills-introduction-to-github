@@ -105,11 +105,12 @@ document.getElementById("submit").addEventListener("click",async()=>{
   document.getElementById("result").innerHTML='<div class="result"><div class="band">'+band+'</div>'+
     '<div>Overall readiness score: <b>'+norm+'/100</b></div>'+rows+
     (flag?'<p style="color:#a3400f;margin-top:12px"><b>Pastoral note:</b> a conversation is recommended before active service.</p>':'')+
-    '<p style="color:var(--gry);font-size:.8rem;margin-top:12px">Your full report follows after all three parts are completed.</p></div>';
+    '<p style="color:var(--gry);font-size:.8rem;margin-top:12px">Part 2 of 3 saved. Continue straight to Part 3 below.</p>'+
+    '<div class="nav"><a class="btn-sb" style="display:block;text-align:center;text-decoration:none;line-height:1.2" href="/u3/'+CID+'">Continue to Part 3 &rarr;</a></div></div>';
   document.getElementById("result").scrollIntoView({behavior:"smooth"});
-  try{const rr=await fetch("/section-submit",{method:"POST",headers:{"content-type":"application/json"},
-    body:JSON.stringify({course:"usher",section:"u2",contactId:CID,domains:dom,normalised:norm,band:band,pastoral_flag:flag})});
-    const dd=await rr.json();if(dd&&dd.home)document.getElementById("result").insertAdjacentHTML("beforeend",'<div class="nav"><a class="btn-sb" style="display:block;text-align:center;text-decoration:none;line-height:1.2" href="'+dd.home+'">Return to GRC home</a></div>');}catch(e){}
+  /* Continue button rendered synchronously above — progression never depends on this call. */
+  try{await fetch("/section-submit",{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({course:"usher",section:"u2",contactId:CID,domains:dom,normalised:norm,band:band,pastoral_flag:flag})});}catch(e){}
 });
 </script>
 </body>
