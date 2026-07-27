@@ -119,8 +119,9 @@ document.getElementById("submit").addEventListener("click",async()=>{
     '<div style="margin-top:18px;padding:20px 16px;border-radius:14px;background:linear-gradient(135deg,#EEF8F0,#EAF1EE);border:1.5px solid #CDE7D6;text-align:center">'+
       '<div style="font-size:2rem;line-height:1">&#128591;</div>'+
       '<div style="font-weight:800;color:var(--tdkr);font-size:1.1rem;margin-top:6px">Thank you &mdash; all done!</div>'+
-      '<p style="color:var(--blk);font-size:.88rem;margin-top:10px;line-height:1.6">Thank you very much for your interest and for completing your Usher &amp; Catcher Serve Readiness Profile. Your responses have been received in full. We will send your complete report to your email, and your Head Usher will be in touch with you shortly.</p>'+
-      '<div style="font-size:.78rem;color:var(--gry);margin-top:12px">Gateway Revival Church &mdash; Benoni</div>'+
+      '<p style="color:var(--blk);font-size:.88rem;margin-top:10px;line-height:1.6">Thank you very much for your interest and for completing your Usher &amp; Catcher Serve Readiness Profile. Your responses have been received in full. Your Head Usher will receive your results and be in touch with you shortly. You can view your full report now using the button below.</p>'+
+      '<a class="btn-sb" style="display:block;text-align:center;text-decoration:none;line-height:1.2;margin-top:14px" href="/report/'+CID+'">View my full report</a>'+
+      '<div style="font-size:.78rem;color:var(--gry);margin-top:14px">Gateway Revival Church &mdash; Benoni</div>'+
     '</div></div>';
   document.getElementById("result").scrollIntoView({behavior:"smooth"});
   /* Closeout rendered synchronously above — never depends on this call. */

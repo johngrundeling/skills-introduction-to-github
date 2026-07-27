@@ -71,6 +71,13 @@ export default {
       m = p.match(/^\/report\/([A-Za-z0-9]+)\/?$/);
       if (m) return renderReport(env, m[1], "candidate");
 
+      // Friendly guard: /report opened without a valid contact id (e.g. an
+      // unresolved {{contact.id}} merge field from a funnel button) — never
+      // show the raw JSON 404 to a candidate.
+      if (p === "/report" || p.startsWith("/report/") || p.startsWith("/report%")) {
+        return html("<body style='font-family:sans-serif;padding:40px 24px;text-align:center;color:#231F20'><div style='max-width:420px;margin:0 auto'><h2 style='color:#3B6261'>Your report link needs your personal ID</h2><p style='color:#6B6B6B;line-height:1.6'>Please open your report from the button at the end of your assessment, or from the personal link sent to you. If you have not completed all three parts yet, finish them first and your report will be ready.</p></div></body>", 404);
+      }
+
       m = p.match(/^\/pastoral\/([A-Za-z0-9]+)\/?$/);
       if (m) {
         if (!env.PASTORAL_TOKEN || url.searchParams.get("token") !== env.PASTORAL_TOKEN)
