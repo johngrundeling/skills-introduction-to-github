@@ -116,5 +116,43 @@ source art later if exact matches are needed:
 | Options | TBG | Thermal Bag | 100 |
 | Options | DLL | Delivery Local | 140 |
 | Options | DLN | Delivery National | 160 |
+| Tissue Repair | ARA10 | ARA-290 10mg | 719 |
+| Tissue Repair | KPV10 | KPV 10mg | 649 |
+| Tissue Repair | SRM10 | Sermorelin 10mg | 1049 |
+| Metabolic | LMB10 | Lemon Bottle 10ml | 799 |
+| Metabolic | MZ10 | Mazdutide 10mg | 1549 |
+| Metabolic | NAD1000 | NAD+ 1000mg | 1249 |
+| Metabolic | SG10 | Semaglutide 10mg | *POA (OOS)* |
+| Metabolic | SG30 | Semaglutide 30mg | *POA (OOS)* |
+| Metabolic | SLU5 | SLU-PP-332 5mg | *POA (OOS)* |
+| Metabolic | TZ15 | Tirzepatide 15mg | 949 |
+| Metabolic | TZ30 | Tirzepatide 30mg | 1300 |
+| Metabolic | TZ60 | Tirzepatide 60mg | 1849 |
+| Longevity | GLU600 | Glutathione 600mg | 649 |
+| Accessories | DPN | Disposable Pen | 350 |
 
-**Total: 52 products** (48 catalogue items + 4 options).
+**Total: 66 products** (48 catalogue items + 4 options + 14 added from the supplier catalogue).
+
+## Supplier reconciliation — purelabs.co.za
+
+The Molecule Co catalogue was cross-checked against the Pure Performance Labs supplier
+catalogue (`purelabs.co.za`, 58 SKUs). **14 items the supplier lists were not on our
+catalogue and have been added** (above). Items already covered by an equivalent SKU were left
+as-is.
+
+**Pricing basis for added items:** across the ~40 products on both lists the retail markup is a
+consistent **+R150** over the supplier price (e.g. BPC-157 599→750, MOTS-c 639→790,
+Retatrutide 899→1049, NAD+ 699→849). Added compounds therefore use **supplier price + R150**;
+consumables use the **supplier price** unchanged (Bacteriostatic Water matches the supplier
+exactly, so no markup on accessories). Adjust any of these if your margins differ.
+
+**Needs your input:**
+- **Semaglutide 10mg / 30mg** and **SLU-PP-332 5mg** are **out of stock** on the supplier site
+  with no listed price — added with price `0.00` and set **not** included in the online store
+  until priced.
+- **Disposable Pen** priced at the supplier's **R350**, but invoice INV0011106 sold it at
+  **R125** — confirm which price applies.
+- **Tirzepatide** now has strength SKUs `TZ15/TZ30/TZ60`; the original strengthless `TZ`
+  (R1,249) is still present — reconcile if it duplicates one of the new variants.
+- Added items have **no product image** yet (they are not in the catalogue PDF). Their images can
+  be sourced from the supplier product pages on request.
