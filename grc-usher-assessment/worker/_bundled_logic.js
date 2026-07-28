@@ -62,6 +62,13 @@ export default {
               const roleTag = u3 && ROLE_TAG[u3.role_fit] ? [ROLE_TAG[u3.role_fit]] : [];
               await ghlAddTags(env, cid, ["usher-cleared"].concat(roleTag));
               await ghlWriteSummary(env, cid);
+              // Email the candidate their report — exactly once — so delivery does
+              // not depend on a GHL workflow being built. Guarded by a marker row.
+              const already = await env.DB.prepare("SELECT 1 AS x FROM usher_submission WHERE contact_id=?1 AND section='_emailed' LIMIT 1").bind(cid).first();
+              if (!already) {
+                const sent = await ghlSendCandidateEmail(env, cid, url.origin);
+                if (sent) await env.DB.prepare("INSERT INTO usher_submission (contact_id, section, payload, created_at) VALUES (?1,'_emailed','{}',?2)").bind(cid, Date.now()).run();
+              }
             }
           } catch (e) {}
         }
@@ -152,6 +159,30 @@ function html(h, s) { return new Response(h, { status: s || 200, headers: { "con
 function ghlHeaders(env) { return { Authorization: "Bearer " + env.GHL_API_TOKEN, Version: "2021-07-28", "Content-Type": "application/json" }; }
 async function ghlAddTags(env, cid, tags) {
   await fetch(GHL_BASE + "/contacts/" + cid + "/tags", { method: "POST", headers: ghlHeaders(env), body: JSON.stringify({ tags: tags }) });
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+async function ghlSendCandidateEmail(env, cid, origin) {
+  if (!env.GHL_API_TOKEN) return false;
+  try {
+    const r = await fetch(GHL_BASE + "/contacts/" + cid, { headers: ghlHeaders(env) });
+    if (!r.ok) return false;
+    const c = (await r.json()).contact || {};
+    if (!c.email) return false;
+    const first = c.firstName || "there";
+    const link = origin + "/report/" + cid;
+    const body = "<div style='font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#231F20;line-height:1.6;max-width:520px'>"
+      + "<p>Dear " + esc(first) + ",</p>"
+      + "<p>Thank you for completing your Usher &amp; Catcher Serve Readiness Profile. Your full report is ready.</p>"
+      + "<p style='margin:22px 0'><a href='" + link + "' style='background:#3B6261;color:#ffffff;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block'>View My Report</a></p>"
+      + "<p style='font-size:13px;color:#6B6B6B'>Or open this link:<br><a href='" + link + "' style='color:#3B6261'>" + link + "</a></p>"
+      + "<p>Your Head Usher will also be in touch with you shortly about your next steps in serving.</p>"
+      + "<p>Love &amp; blessings,<br><b>Gateway Revival Church — Benoni</b></p></div>";
+    const resp = await fetch(GHL_BASE + "/conversations/messages", {
+      method: "POST", headers: ghlHeaders(env),
+      body: JSON.stringify({ type: "Email", contactId: cid, subject: "Your Gateway Revival Church — Usher & Catcher Report", html: body })
+    });
+    return resp.ok;
+  } catch (e) { return false; }
 }
 async function ghlWriteSummary(env, cid) {
   const [u1, u2, u3] = await Promise.all([latest(env, cid, "u1"), latest(env, cid, "u2"), latest(env, cid, "u3")]);

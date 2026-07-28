@@ -24,6 +24,11 @@
   .role b{color:var(--tdkr)}
   .verse{font-style:italic;color:var(--gry);font-size:.88rem;text-align:center;padding:20px 24px}
   .foot{text-align:center;color:var(--gry);font-size:.7rem;padding:14px}
+  .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:18px 24px;background:#F7FAFA;border-top:1px solid #EEF3F4}
+  .actions button,.actions a{font-family:var(--fn);cursor:pointer;border:none;border-radius:10px;padding:13px 20px;font-size:.85rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(59,98,97,.22)}
+  .btn-pdf{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff}
+  .btn-wa{background:#25D366;color:#fff}
+  @media print{.actions{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
 </style>
 </head>
 <body>
@@ -60,11 +65,21 @@
     </div>
   </div>
 
+  <div class="actions">
+    <button type="button" class="btn-pdf" onclick="window.print()">&#128190; Save / Print as PDF</button>
+    <a id="wa" class="btn-wa" href="#" target="_blank" rel="noopener">&#128241; Send to WhatsApp</a>
+  </div>
+
   <div class="verse">
     "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms." — 1 Peter 4:10
     <div style="margin-top:10px;font-style:normal">Your Head Usher will be in touch about your next step.<br><b>Gateway Revival Church — Benoni</b></div>
   </div>
   <div class="foot">GRC Ministry Training · Usher &amp; Catcher · Serve Readiness Profile</div>
 </div>
+<script>
+  (function(){var u=location.href.split('#')[0];
+   var msg="My Gateway Revival Church — Usher & Catcher Serve Readiness report:\n"+u;
+   var wa=document.getElementById("wa");if(wa)wa.href="https://wa.me/?text="+encodeURIComponent(msg);})();
+</script>
 </body>
 </html>

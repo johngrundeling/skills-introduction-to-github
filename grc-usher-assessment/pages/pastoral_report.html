@@ -23,6 +23,12 @@
   .action{background:var(--glt);border-radius:10px;padding:14px;font-size:.9rem;margin-top:8px}
   .action b{color:var(--tdkr)}
   .foot{text-align:center;color:var(--gry);font-size:.68rem;padding:14px}
+  .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:18px 24px;background:#F7FAFA;border-top:1px solid #EEF3F4}
+  .actions button,.actions a{font-family:var(--fn);cursor:pointer;border:none;border-radius:10px;padding:13px 20px;font-size:.85rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(59,98,97,.22)}
+  .btn-pdf{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff}
+  .btn-wa{background:#25D366;color:#fff}
+  .actions .note{flex-basis:100%;text-align:center;font-size:.68rem;color:var(--warn);margin-top:2px}
+  @media print{.actions{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
 </style>
 </head>
 <body>
@@ -60,7 +66,17 @@
       <b>Pastoral action:</b> {{pastoral_action}}
     </div>
   </div>
+  <div class="actions">
+    <button type="button" class="btn-pdf" onclick="window.print()">&#128190; Save / Print as PDF</button>
+    <a id="wa" class="btn-wa" href="#" target="_blank" rel="noopener">&#128241; Send to WhatsApp</a>
+    <div class="note">Confidential — share only with pastoral / Head-Usher leadership.</div>
+  </div>
   <div class="foot">GRC Ministry Training · Usher &amp; Catcher · Pastoral Review · Do Not Distribute</div>
 </div>
+<script>
+  (function(){var u=location.href.split('#')[0];
+   var msg="CONFIDENTIAL — GRC Usher & Catcher pastoral report ({{name}}):\n"+u;
+   var wa=document.getElementById("wa");if(wa)wa.href="https://wa.me/?text="+encodeURIComponent(msg);})();
+</script>
 </body>
 </html>
