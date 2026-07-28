@@ -10,7 +10,7 @@ used on the Pure Performance Labs invoices, so invoice line items read consisten
 |------|---------|
 | `molecule-co-products-GHL.csv` | **GHL upload.** 66 products in GHL's exact 29-column Shopify-style import template (GHL → Payments → Products → Import). |
 | `molecule-co-products.csv` | Master / human-readable reference (8 columns): name, SKU, category, description, price, image URL. Source of truth for the sync worker. |
-| `The_Molecule_Co_Price_Schedule_Cust.pdf` / `.docx` | **Customer-facing price list** — matches the branded reference exactly (logo, gold accents, no product codes), 62 products across the 6 catalogue categories, +R149 pricing. |
+| `The_Molecule_Co_Price_Schedule_Cust.pdf` / `.docx` | **Customer-facing price list** — matches the branded reference exactly (logo, gold accents, no product codes), all 66 products across 7 sections incl. Options & Delivery, +R149 pricing. |
 | `The_Molecule_Co_Price_Schedule.docx` / `.pdf` | Internal price schedule variant — same content but with product codes shown (all 66 incl. options). |
 | `molecule-co-catalogue.html` | Responsive web catalogue with per-product CTA links (deploy to the website). |
 | `images/` | Product images, named by product code (catalogue vials + supplier images for added items). |
