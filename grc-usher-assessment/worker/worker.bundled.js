@@ -68,6 +68,7 @@ export default {
               const already = await env.DB.prepare("SELECT 1 AS x FROM usher_submission WHERE contact_id=?1 AND section='_emailed' LIMIT 1").bind(cid).first();
               if (!already) {
                 const sent = await ghlSendCandidateEmail(env, cid, url.origin);
+                await ghlSendLeadershipEmail(env, cid, url.origin); // best-effort notification to leadership
                 if (sent) await env.DB.prepare("INSERT INTO usher_submission (contact_id, section, payload, created_at) VALUES (?1,'_emailed','{}',?2)").bind(cid, Date.now()).run();
               }
             }
@@ -181,6 +182,35 @@ async function ghlSendCandidateEmail(env, cid, origin) {
     const resp = await fetch(GHL_BASE + "/conversations/messages", {
       method: "POST", headers: ghlHeaders(env),
       body: JSON.stringify({ type: "Email", contactId: cid, subject: "Your Gateway Revival Church — Usher & Catcher Report", html: body })
+    });
+    return resp.ok;
+  } catch (e) { return false; }
+}
+async function ghlSendLeadershipEmail(env, cid, origin) {
+  // Sends to the Head-Usher contact (LEADERSHIP_TO_CONTACT_ID) and CCs the
+  // pastors (LEADERSHIP_CC). GHL only allows the "to" of an outbound email to
+  // be the message's contact, so leadership must be a real contact; CC accepts
+  // any address.
+  if (!env.GHL_API_TOKEN || !env.LEADERSHIP_TO_CONTACT_ID) return false;
+  try {
+    const r = await fetch(GHL_BASE + "/contacts/" + cid, { headers: ghlHeaders(env) });
+    const c = r.ok ? ((await r.json()).contact || {}) : {};
+    const name = ((c.firstName || "") + " " + (c.lastName || "")).trim() || "A candidate";
+    const phone = c.phone || "";
+    let summary = "";
+    if (Array.isArray(c.customFields)) { const f = c.customFields.find(function (x) { return x.id === SUMMARY_FIELD_ID; }); if (f) summary = f.value || ""; }
+    const rep = origin + "/report/" + cid;
+    const pas = origin + "/pastoral/" + cid + (env.PASTORAL_TOKEN ? "?token=" + env.PASTORAL_TOKEN : "");
+    const body = "<div style='font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#231F20;line-height:1.6;max-width:560px'>"
+      + "<p><b>" + esc(name) + "</b> " + (phone ? "(" + esc(phone) + ") " : "") + "has completed the Usher &amp; Catcher Serve Readiness assessment.</p>"
+      + (summary ? "<p><b>Result:</b> " + esc(summary) + "</p>" : "")
+      + "<p><b>Candidate report:</b><br><a href='" + rep + "' style='color:#3B6261'>" + rep + "</a></p>"
+      + "<p><b>Pastoral report</b> (confidential):<br><a href='" + pas + "' style='color:#3B6261'>" + pas + "</a></p>"
+      + "<p style='font-size:13px;color:#6B6B6B'>Automated notification &mdash; Gateway Revival Church, Benoni.</p></div>";
+    const cc = env.LEADERSHIP_CC ? String(env.LEADERSHIP_CC).split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [];
+    const resp = await fetch(GHL_BASE + "/conversations/messages", {
+      method: "POST", headers: ghlHeaders(env),
+      body: JSON.stringify({ type: "Email", contactId: env.LEADERSHIP_TO_CONTACT_ID, emailCc: cc, subject: "New Usher assessment completed — " + name, html: body })
     });
     return resp.ok;
   } catch (e) { return false; }
