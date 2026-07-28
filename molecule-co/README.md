@@ -8,9 +8,13 @@ used on the Pure Performance Labs invoices, so invoice line items read consisten
 
 | File | Purpose |
 |------|---------|
-| `molecule-co-products-GHL.csv` | **Upload this.** 52 products in GHL's exact 29-column Shopify-style import template (GHL → Payments → Products → Import). |
-| `molecule-co-products.csv` | Human-readable reference (8 columns): name, SKU, category, description, price, image URL. |
-| `images/` | 48 product images (one per catalogue item), named by product code. |
+| `molecule-co-products-GHL.csv` | **GHL upload.** 66 products in GHL's exact 29-column Shopify-style import template (GHL → Payments → Products → Import). |
+| `molecule-co-products.csv` | Master / human-readable reference (8 columns): name, SKU, category, description, price, image URL. Source of truth for the sync worker. |
+| `The_Molecule_Co_Price_Schedule.docx` | Rebuilt customer price schedule (Word), original layout, current +R149 pricing. |
+| `The_Molecule_Co_Price_Schedule.pdf` | Same price schedule as print-ready PDF (render-verified). |
+| `molecule-co-catalogue.html` | Responsive web catalogue with per-product CTA links (deploy to the website). |
+| `images/` | Product images, named by product code (catalogue vials + supplier images for added items). |
+| `build_schedule.js` / `build_schedule_pdf.py` | Generators that rebuild the Word / PDF schedule from the master list. |
 
 ## GHL import format notes
 
@@ -140,11 +144,13 @@ catalogue (`purelabs.co.za`, 58 SKUs). **14 items the supplier lists were not on
 catalogue and have been added** (above). Items already covered by an equivalent SKU were left
 as-is.
 
-**Pricing basis for added items:** across the ~40 products on both lists the retail markup is a
-consistent **+R150** over the supplier price (e.g. BPC-157 599→750, MOTS-c 639→790,
-Retatrutide 899→1049, NAD+ 699→849). Added compounds therefore use **supplier price + R150**;
-consumables use the **supplier price** unchanged (Bacteriostatic Water matches the supplier
-exactly, so no markup on accessories). Adjust any of these if your margins differ.
+**Pricing basis (reseller rule):** our retail = **Pure Labs list price + R149** on every product
+they sell. The **entire catalogue has been re-derived to this rule** so pricing is consistent
+across the master list, the GHL CSV, the HTML, and the Word/PDF schedule. Our **cost** = supplier
+list × 0.75 (25% reseller discount), except flat costs Disposable Pen **R125**, Ice pack **R35**,
+Thermal packaging **R100**. Out-of-stock supplier items show **POA** and are excluded from the
+online store. (Note: Bacteriostatic Water 10ml moves to R299 under the flat +R149 rule — flag if
+consumables should instead stay at cost.)
 
 **Needs your input:**
 - **Semaglutide 10mg / 30mg** and **SLU-PP-332 5mg** are **out of stock** on the supplier site
