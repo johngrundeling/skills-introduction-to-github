@@ -144,13 +144,14 @@ catalogue (`purelabs.co.za`, 58 SKUs). **14 items the supplier lists were not on
 catalogue and have been added** (above). Items already covered by an equivalent SKU were left
 as-is.
 
-**Pricing basis (reseller rule):** our retail = **Pure Labs list price + R149** on every product
-they sell. The **entire catalogue has been re-derived to this rule** so pricing is consistent
-across the master list, the GHL CSV, the HTML, and the Word/PDF schedule. Our **cost** = supplier
-list × 0.75 (25% reseller discount), except flat costs Disposable Pen **R125**, Ice pack **R35**,
-Thermal packaging **R100**. Out-of-stock supplier items show **POA** and are excluded from the
-online store. (Note: Bacteriostatic Water 10ml moves to R299 under the flat +R149 rule — flag if
-consumables should instead stay at cost.)
+**Pricing basis (reseller rule):** our retail = **Pure Labs list price + R149 markup + R27 own-packaging
+surcharge = list + R176**, applied to every repackaged product (categories 1–6). The +R27 covers
+our own packaging so supplier packaging never reaches clients. The **Options & Delivery** items
+(Ice Pack R35, Thermal Bag R100, Delivery Local R145, Delivery National R249) are set line items
+and do **not** carry the +R27. Out-of-stock items show **POA**; the free Bacteriostatic Water base
+stays R0.00. Our **cost** = supplier list × 0.75 (25% reseller discount), except flat costs
+Disposable Pen **R125**, Ice pack **R35**, Thermal packaging **R100**. All outputs (master list,
+GHL CSV, HTML, and both Word/PDF schedules) are regenerated to this rule.
 
 **Needs your input:**
 - **Semaglutide 10mg / 30mg** and **SLU-PP-332 5mg** are **out of stock** on the supplier site
