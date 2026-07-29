@@ -112,7 +112,7 @@ export default {
             const up = await fetch("https://services.leadconnectorhq.com/contacts/upsert", {
               method: "POST",
               headers: { Authorization: "Bearer " + env.GHL_API_TOKEN, Version: "2021-07-28", "Content-Type": "application/json" },
-              body: JSON.stringify({ locationId: env.GHL_LOCATION_ID, name: b.name, email: b.email, phone: b.mobile, tags: ["usher-registered", "usher-selfie-captured"] })
+              body: JSON.stringify({ locationId: env.GHL_LOCATION_ID, name: b.name, email: b.email, phone: b.mobile, tags: ["usher-registered", "usher-selfie-captured"].concat(b.agree ? ["usher-nbc-attested"] : []) })
             });
             const uj = await up.json();
             contactId = (uj.contact && uj.contact.id) || uj.id || null;

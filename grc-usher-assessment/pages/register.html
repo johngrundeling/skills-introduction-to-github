@@ -30,6 +30,8 @@
   .btn-sb{width:100%;margin-top:20px;padding:15px 20px;border-radius:10px;font-size:.92rem;font-weight:700;border:none;cursor:pointer;font-family:var(--fn);background:linear-gradient(135deg,var(--blk),var(--tdkr));color:var(--wht);box-shadow:0 3px 13px rgba(59,98,97,.32)}
   .btn-sb:disabled{opacity:.45;box-shadow:none}
   .hint{font-size:.68rem;color:var(--gry);margin-top:6px;text-align:center}
+  .agree{display:flex;gap:10px;align-items:flex-start;margin-top:20px;padding:12px 14px;background:var(--glt);border-radius:10px;font-size:.8rem;color:var(--blk);line-height:1.5;cursor:pointer}
+  .agree input{margin-top:2px;width:18px;height:18px;flex:none}
   .foot{text-align:center;color:var(--gry);font-size:.68rem;padding:14px 0 4px}
 </style>
 </head>
@@ -39,7 +41,7 @@
     <div class="top-hdr">
       <h1>Gateway Revival Church</h1>
       <div class="sec-badge">Usher &amp; Catcher Registration</div>
-      <div class="hdr-sub">Welcome! Register below to begin your Serve Readiness Profile. Your selfie helps your Head Usher recognise you on the team.</div>
+      <div class="hdr-sub">Welcome! This Serve Readiness Profile is for those who have completed the <b>New Believers Course</b> and desire to serve. Register below to begin. Your selfie helps your Head Usher recognise you on the team.</div>
     </div>
     <div class="body">
       <label class="fld">Full name</label>
@@ -63,6 +65,8 @@
         <div class="hint">Camera not working? <a href="#" id="pick" style="color:var(--tdk)">upload a photo</a> instead.</div>
       </div>
 
+      <label class="agree"><input type="checkbox" id="agree"><span>I have completed the <b>New Believers Course</b>, and I commit to a holy, reliable and consistent walk as I step into serving at Gateway Revival Church.</span></label>
+
       <button class="btn-sb" id="go" disabled>Start my assessment</button>
       <div class="hint" id="status"></div>
     </div>
@@ -73,8 +77,9 @@
 <script>
 const $=id=>document.getElementById(id);
 let selfie="";let stream=null;
-function validate(){const ok=$("name").value.trim()&&$("email").value.trim()&&$("mobile").value.trim()&&selfie;$("go").disabled=!ok;}
+function validate(){const ok=$("name").value.trim()&&$("email").value.trim()&&$("mobile").value.trim()&&selfie&&$("agree").checked;$("go").disabled=!ok;}
 ["name","mobile","email"].forEach(id=>$(id).addEventListener("input",validate));
+$("agree").addEventListener("change",validate);
 $("start").addEventListener("click",async()=>{
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}});
     $("cam").srcObject=stream;$("cam").style.display="block";$("ph").style.display="none";$("shot").style.display="none";
@@ -98,7 +103,7 @@ $("file").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;c
   r.readAsDataURL(f);});
 $("go").addEventListener("click",async()=>{
   $("go").disabled=true;$("status").textContent="Setting up your profile…";
-  const payload={course:"usher",name:$("name").value.trim(),mobile:$("mobile").value.trim(),email:$("email").value.trim().toLowerCase(),selfie:selfie};
+  const payload={course:"usher",name:$("name").value.trim(),mobile:$("mobile").value.trim(),email:$("email").value.trim().toLowerCase(),selfie:selfie,agree:$("agree").checked};
   try{
     const r=await fetch("/register",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
     const d=await r.json();
