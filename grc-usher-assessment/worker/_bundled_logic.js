@@ -19,7 +19,8 @@ const ROLE_CATALOGUE = [
     blurb: "Directs crowd flow and assists the ministry to catch those who fall under prayer." },
   { key: "head",      label: "Head-Usher track", tag: "usher-role-head",
     lean: { DR: 1, DE: 0.4 }, gifts: ["Administration", "Leadership"], minBand: "Ready", blockedByFlag: true,
-    blurb: "Coordinates and leads the usher team; organises rosters and floor flow." },
+    blurb: "Coordinates and leads the usher team; organises rosters and floor flow.",
+    prefBlurb: "The Advance Team selects the Head Usher — tick to register your wish and availability to be considered, given training and leadership approval." },
   { key: "parking",   label: "Parking Assistant", tag: "usher-role-parking",
     lean: { DR: 0.7, ST: 0.7 }, gifts: ["Helps & Service"], minBand: "Developing", blockedByFlag: false,
     blurb: "Directs and assists with parking; a practical, welcoming first point of contact." },
@@ -78,7 +79,7 @@ function roleFitRows(fits, topN) {
 function prefCheckboxes(chosen) {
   const set = {}; (chosen || []).forEach(function (k) { set[k] = 1; });
   return ROLE_CATALOGUE.map(function (r) {
-    return "<label class='pick'><input type='checkbox' name='prefrole' value='" + r.key + "'" + (set[r.key] ? " checked" : "") + "><span><b>" + esc(r.label) + "</b><br><small>" + esc(r.blurb) + "</small></span></label>";
+    return "<label class='pick'><input type='checkbox' name='prefrole' value='" + r.key + "'" + (set[r.key] ? " checked" : "") + "><span><b>" + esc(r.label) + "</b><br><small>" + esc(r.prefBlurb || r.blurb) + "</small></span></label>";
   }).join("");
 }
 function placeOptions(current) {
