@@ -1,0 +1,35 @@
+name = "grc-usher-staging-worker"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Static assets = the three assessment pages (served at /u1|/u2|/u3).
+[assets]
+directory = "../pages"
+binding = "ASSETS"
+
+# Reuse the existing GRC D1 database (same DB as the DNA engine), but the
+# worker only reads/writes its OWN usher_submission table (see migration.sql).
+# Fill database_name/database_id at deploy time (from `wrangler d1 list`
+# or the CF dashboard) — left as placeholders so nothing live is assumed.
+[[d1_databases]]
+binding = "DB"
+database_name = "REPLACE_WITH_GRC_D1_NAME"
+database_id   = "REPLACE_WITH_GRC_D1_ID"
+
+# Selfie storage prefix lives in the existing GRC R2 bucket (grc-usher-photos/).
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "REPLACE_WITH_GRC_R2_BUCKET"
+
+[vars]
+ENVIRONMENT = "staging"
+COURSE = "usher"
+# Public base for the R2 bucket (used to show the selfie on reports):
+R2_PUBLIC_BASE = "https://pub-f977671783e443318513efc9bcd434d6.r2.dev"
+# Where each finished section returns the member (a GHL "usher home" page):
+HOME_URL = "REPLACE_WITH_GHL_USHER_HOME_URL"
+
+# Secrets (phase 2), set out-of-band — never commit these:
+#   wrangler secret put GHL_API_TOKEN      # LeadConnector private token
+#   wrangler secret put GHL_LOCATION_ID    # POa0egWeYo78ArtCaAi4
+#   wrangler secret put PASTORAL_TOKEN     # gates /pastoral/<cid>?token=

@@ -1,0 +1,16 @@
+name = "grc-usher-staging-worker"
+main = "worker.bundled.js"
+compatibility_date = "2026-07-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "grc-dna-staging"
+database_id = "7e816bce-dd00-4097-9ccf-d8fb51c3d38e"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "grc-dna-staging"
+
+[vars]
+ENVIRONMENT = "staging"
+R2_PUBLIC_BASE = "https://pub-f977671783e443318513efc9bcd434d6.r2.dev"

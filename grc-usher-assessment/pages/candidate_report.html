@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRC Serve — Your Readiness Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Report template — placeholders {{...}} filled by the report generator.
+     Reuses the GRC design tokens; print-friendly (A4). */
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--blk:#231F20;--gry:#6B6B6B;--glt:#F5F5F5;--wht:#fff;--tdk:#547878;--tdkr:#3B6261;--t2:#7DA3A4;--gold:#C8900A;--fn:'Montserrat',sans-serif}
+  body{font-family:var(--fn);color:var(--blk);background:#EEF3F4;padding:16px}
+  .pg{max-width:720px;margin:0 auto;background:var(--wht);border-radius:16px;overflow:hidden;box-shadow:0 4px 28px rgba(84,120,120,.14)}
+  .hero{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff;padding:26px 24px;text-align:center}
+  .hero img{width:104px;height:104px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.7);margin-bottom:12px}
+  .hero h1{font-size:1.3rem;font-weight:800}
+  .hero .sub{opacity:.9;font-size:.8rem;margin-top:4px}
+  .sec{padding:20px 24px;border-bottom:1px solid #EEF3F4}
+  .sec h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:var(--tdk);font-weight:800;margin-bottom:10px}
+  .big{font-size:1.8rem;font-weight:800;color:var(--tdkr)}
+  .row{display:flex;justify-content:space-between;padding:6px 0;font-size:.9rem;border-top:1px solid #F1F5F6}
+  .role{background:var(--glt);border-radius:12px;padding:16px;font-size:.95rem}
+  .role b{color:var(--tdkr)}
+  .verse{font-style:italic;color:var(--gry);font-size:.88rem;text-align:center;padding:20px 24px}
+  .foot{text-align:center;color:var(--gry);font-size:.7rem;padding:14px}
+  .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:18px 24px;background:#F7FAFA;border-top:1px solid #EEF3F4}
+  .actions button,.actions a{font-family:var(--fn);cursor:pointer;border:none;border-radius:10px;padding:13px 20px;font-size:.85rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(59,98,97,.22)}
+  .btn-pdf{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff}
+  .btn-wa{background:#25D366;color:#fff}
+  .fit{padding:10px 0;border-top:1px solid #F1F5F6}
+  .fit:first-child{border-top:none}
+  .fit-h{display:flex;justify-content:space-between;font-size:.9rem;font-weight:700}
+  .fit-pct{color:var(--tdkr)}
+  .bar{height:8px;background:#E7EEEE;border-radius:6px;overflow:hidden;margin:5px 0}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--t2),var(--tdkr))}
+  .fit-b{font-size:.8rem;color:var(--gry)}
+  .gate{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 6px;border-radius:6px;vertical-align:middle}
+  .gate.hold{background:#FFF3EC;color:#a3400f;border:1px solid #F0C9AE}
+  .gate.grow{background:#FFF8E6;color:#8a6d1a;border:1px solid #EAD9A0}
+  .pick{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid #E7EEEE;border-radius:10px;margin-bottom:8px;cursor:pointer}
+  .pick input{margin-top:3px}
+  .pick small{color:var(--gry)}
+  .save{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff;border:none;border-radius:10px;padding:12px 18px;font-family:var(--fn);font-weight:700;cursor:pointer;font-size:.85rem}
+  .saved{font-size:.8rem;color:var(--tdkr);margin-left:10px}
+  @media print{.actions,#prefsec{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
+</style>
+</head>
+<body>
+<div class="pg">
+  <div class="hero">
+    <img src="{{selfie_url}}" alt="{{name}}">
+    <h1>{{name}}</h1>
+    <div class="sub">Your GRC Serve Readiness Profile · {{date}}</div>
+  </div>
+
+  <div class="sec">
+    <h2>Part 1 · Servant Heart Profile</h2>
+    <div class="big">{{s1_code}}</div>
+    <p style="margin-top:4px"><b>{{s1_primary}}</b> (primary) · <b>{{s1_secondary}}</b> (secondary)</p>
+    <p style="margin-top:8px;font-size:.92rem">{{s1_how_you_serve}}</p>
+  </div>
+
+  <div class="sec">
+    <h2>Part 2 · Serve-Ready Check</h2>
+    <div class="big">{{s2_band}}</div>
+    <p style="margin-top:2px">Readiness score: <b>{{s2_score}}/100</b></p>
+    <p style="margin-top:8px;font-size:.9rem">{{s2_encouragement}}</p>
+  </div>
+
+  <div class="sec">
+    <h2>Part 3 · Your Top Serving Gifts</h2>
+    {{s3_top_gifts_rows}}
+  </div>
+
+  <div class="sec">
+    <h2>Your Best-Fit Serving Roles</h2>
+    {{role_fit_rows}}
+    <p style="margin-top:8px;font-size:.82rem;color:var(--gry)">These are suggestions drawn from your profile — your Head Usher makes the final placement.</p>
+  </div>
+
+  <div class="sec" id="prefsec">
+    <h2>Where would you love to serve?</h2>
+    <p style="font-size:.86rem;margin-bottom:10px">Tick any roles you feel drawn to. This shares your heart with your Head Usher — it does not decide your placement.</p>
+    {{pref_checkboxes}}
+    <div style="margin-top:6px"><button type="button" class="save" id="savepref">Save my preference</button><span class="saved" id="prefmsg"></span></div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn-pdf" onclick="window.print()">&#128190; Save / Print as PDF</button>
+    <a id="wa" class="btn-wa" href="#" target="_blank" rel="noopener">&#128241; Send to WhatsApp</a>
+  </div>
+
+  <div class="verse">
+    "Each of you should use whatever gift you have received to serve others, as faithful stewards of God's grace in its various forms." — 1 Peter 4:10
+    <div style="margin-top:10px;font-style:normal">Your Head Usher will be in touch about your next step.<br><b>Gateway Revival Church — Benoni</b></div>
+  </div>
+  <div class="foot">GRC Ministry Training · Usher &amp; Catcher · Serve Readiness Profile</div>
+</div>
+<script>
+  (function(){var u=location.href.split('#')[0];
+   var msg="My Gateway Revival Church — Usher & Catcher Serve Readiness report:\n"+u;
+   var wa=document.getElementById("wa");if(wa)wa.href="https://wa.me/?text="+encodeURIComponent(msg);})();
+  (function(){var cid="{{cid}}";var btn=document.getElementById("savepref");if(!btn)return;
+   btn.addEventListener("click",function(){
+     var roles=[].slice.call(document.querySelectorAll("input[name=prefrole]:checked")).map(function(i){return i.value;});
+     btn.disabled=true;var msg=document.getElementById("prefmsg");msg.textContent="Saving…";
+     fetch("/prefer/"+cid,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({roles:roles})})
+      .then(function(r){return r.json();}).then(function(j){msg.textContent=j.ok?"Saved — thank you!":"Could not save.";btn.disabled=false;})
+      .catch(function(){msg.textContent="Could not save.";btn.disabled=false;});
+   });})();
+</script>
+</body>
+</html>
