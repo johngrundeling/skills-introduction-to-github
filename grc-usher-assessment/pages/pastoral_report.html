@@ -28,7 +28,20 @@
   .btn-pdf{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff}
   .btn-wa{background:#25D366;color:#fff}
   .actions .note{flex-basis:100%;text-align:center;font-size:.68rem;color:var(--warn);margin-top:2px}
-  @media print{.actions{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
+  .fit{padding:9px 0;border-top:1px solid #F1F5F6}
+  .fit:first-child{border-top:none}
+  .fit-h{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700}
+  .fit-pct{color:var(--tdkr)}
+  .bar{height:7px;background:#E7EEEE;border-radius:6px;overflow:hidden;margin:4px 0}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#7DA3A4,var(--tdkr))}
+  .fit-b{font-size:.76rem;color:var(--gry)}
+  .gate{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 6px;border-radius:6px;vertical-align:middle}
+  .gate.hold{background:#FFF3EC;color:var(--warn);border:1px solid #F0C9AE}
+  .gate.grow{background:#FFF8E6;color:#8a6d1a;border:1px solid #EAD9A0}
+  .place select{font-family:var(--fn);font-size:.9rem;padding:10px;border:1px solid #CBD9D9;border-radius:8px;width:100%;margin-top:6px}
+  .place button{margin-top:10px;background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff;border:none;border-radius:9px;padding:11px 18px;font-family:var(--fn);font-weight:700;cursor:pointer;font-size:.85rem}
+  .place .msg{font-size:.78rem;color:var(--tdkr);margin-left:10px}
+  @media print{.actions,.place{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
 </style>
 </head>
 <body>
@@ -60,10 +73,22 @@
   </div>
 
   <div class="sec">
-    <h2>Recommended Action</h2>
+    <h2>Role Fit — Ranked</h2>
+    {{role_fit_rows}}
+    <div class="row"><span>Candidate's stated preference</span><span>{{candidate_pref}}</span></div>
+  </div>
+
+  <div class="sec">
+    <h2>Recommended Action &amp; Placement</h2>
     <div class="action">
-      <b>Placement:</b> {{recommended_role}}<br>
+      <b>Top system fit:</b> {{recommended_role}}<br>
       <b>Pastoral action:</b> {{pastoral_action}}
+    </div>
+    <div class="place" style="margin-top:14px">
+      <label style="font-size:.7rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--tdk)">Place this person in a role</label>
+      <select id="placesel">{{place_options}}</select>
+      <div><button type="button" id="saveplace">Save placement</button><span class="msg" id="placemsg"></span></div>
+      <div style="font-size:.74rem;color:var(--gry);margin-top:8px">Current placement: <b>{{placement_current}}</b></div>
     </div>
   </div>
   <div class="actions">
@@ -77,6 +102,14 @@
   (function(){var u=location.href.split('#')[0];
    var msg="CONFIDENTIAL — GRC Usher & Catcher pastoral report ({{name}}):\n"+u;
    var wa=document.getElementById("wa");if(wa)wa.href="https://wa.me/?text="+encodeURIComponent(msg);})();
+  (function(){var cid="{{cid}}";var sel=document.getElementById("placesel");var btn=document.getElementById("saveplace");if(!btn||!sel)return;
+   var token=new URLSearchParams(location.search).get("token")||"";
+   btn.addEventListener("click",function(){
+     btn.disabled=true;var msg=document.getElementById("placemsg");msg.textContent="Saving…";
+     fetch("/place/"+cid+"?token="+encodeURIComponent(token),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({role:sel.value})})
+      .then(function(r){return r.json();}).then(function(j){msg.textContent=j.ok?("Placed: "+(j.label||"— cleared —")):"Not authorised / failed.";btn.disabled=false;})
+      .catch(function(){msg.textContent="Failed.";btn.disabled=false;});
+   });})();
 </script>
 </body>
 </html>

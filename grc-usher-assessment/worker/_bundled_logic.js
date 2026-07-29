@@ -4,6 +4,89 @@
 const SECTIONS = { u1: "u1.html", u2: "u2.html", u3: "u3.html" };
 const ROLE_LEAN = { EX: "Welcome Usher", DR: "Floor / Head-Usher track", DE: "Ministry Support / Safety", ST: "Ministry Support (Catcher) & Follow-Up" };
 const ROLE_TAG = { "Welcome Usher": "usher-role-welcome", "Floor / Head-Usher track": "usher-role-floor", "Ministry Support (Catcher) / Safety": "usher-role-ministry-support", "Follow-Up Usher": "usher-role-followup", "Undergirding support (any role)": "" };
+
+// ── Role catalogue ───────────────────────────────────────────────────────────
+// Data-driven so roles can be added/renamed here without touching the scoring
+// logic. lean = Part-1 temperament weights; gifts = Part-3 gifts that predict
+// fit; minBand = readiness gate; blockedByFlag = safety roles a pastoral flag
+// must hold; tag = GHL tag written when a person is placed into the role.
+const ROLE_CATALOGUE = [
+  { key: "greeter",   label: "Greeter (welcome, direct & seat)", tag: "usher-role-greeter",
+    lean: { EX: 1, ST: 0.5 }, gifts: ["Hospitality", "Encouragement"], minBand: "Developing", blockedByFlag: false,
+    blurb: "Greets and directs people at the door, and helps with welcoming and seating." },
+  { key: "floor",     label: "Floor Usher / Catcher", tag: "usher-role-floor",
+    lean: { DR: 1, ST: 0.7 }, gifts: ["Leadership", "Faith", "Discernment", "Mercy", "Helps & Service"], minBand: "Ready", blockedByFlag: true,
+    blurb: "Directs crowd flow and assists the ministry to catch those who fall under prayer." },
+  { key: "head",      label: "Head-Usher track", tag: "usher-role-head",
+    lean: { DR: 1, DE: 0.4 }, gifts: ["Administration", "Leadership"], minBand: "Ready", blockedByFlag: true,
+    blurb: "Coordinates and leads the usher team; organises rosters and floor flow." },
+  { key: "parking",   label: "Parking Assistant", tag: "usher-role-parking",
+    lean: { DR: 0.7, ST: 0.7 }, gifts: ["Helps & Service"], minBand: "Developing", blockedByFlag: false,
+    blurb: "Directs and assists with parking; a practical, welcoming first point of contact." },
+  { key: "helper",    label: "Helper (behind-the-scenes)", tag: "usher-role-helper",
+    lean: { ST: 1, DE: 0.6 }, gifts: ["Helps & Service", "Giving"], minBand: "Developing", blockedByFlag: false,
+    blurb: "Dependable behind-the-scenes support wherever practical help is needed." },
+  { key: "followup",  label: "Follow-Up Usher", tag: "usher-role-followup",
+    lean: { ST: 0.8, EX: 0.7 }, gifts: ["Evangelism & Follow-Up", "Shepherding"], minBand: "Ready", blockedByFlag: false,
+    blurb: "Connects with newcomers and helps them take their next step." },
+  { key: "undergird", label: "Undergirding (prayer & giving)", tag: "usher-role-undergird",
+    lean: {}, gifts: ["Intercession", "Giving"], minBand: "Developing", blockedByFlag: false,
+    blurb: "Supports every role through faithful prayer and generous giving." }
+];
+const ROLE_BY_KEY = ROLE_CATALOGUE.reduce(function (m, r) { m[r.key] = r; return m; }, {});
+const BAND_RANK = { "Not-yet": 0, "Developing": 1, "Ready": 2 };
+
+// Rank every catalogue role by fit for this candidate. Blend of gifts (Part 3),
+// temperament (Part 1) and readiness (Part 2), then apply gates: safety roles
+// are held when a pastoral flag is raised; roles are capped below their required
+// readiness band ("grow first").
+function computeRoleFits(u1, u2, u3) {
+  const traits = (u1 && u1.scores) || {};
+  const band = (u2 && u2.band) || null;
+  const flag = !!(u2 && u2.pastoral_flag);
+  const readFrac = (u2 && typeof u2.normalised === "number") ? u2.normalised / 100 : 0.5;
+  const giftTotal = function (g) { return (u3 && u3.gifts && u3.gifts[g]) ? (u3.gifts[g].total || 0) : 0; };
+  const out = ROLE_CATALOGUE.map(function (r) {
+    let tw = 0, ts = 0;
+    for (const k in r.lean) { tw += r.lean[k]; ts += (Number(traits[k]) || 0) / 40 * r.lean[k]; }
+    const tempScore = tw ? ts / tw : 0.5; // no-lean roles (undergird) are temperament-neutral
+    let gs = 0; for (const g of r.gifts) gs += giftTotal(g) / 20;
+    const giftScore = r.gifts.length ? gs / r.gifts.length : 0;
+    let pct = Math.round(100 * (0.4 * giftScore + 0.35 * tempScore + 0.25 * readFrac));
+    let gate = "";
+    if (r.blockedByFlag && flag) { gate = "hold"; pct = Math.min(pct, 45); }
+    else if (band && BAND_RANK[band] < BAND_RANK[r.minBand]) { gate = "grow"; pct = Math.min(pct, 59); }
+    let why = "";
+    const gp = r.gifts.map(function (g) { return [g, giftTotal(g)]; }).sort(function (a, b) { return b[1] - a[1]; })[0];
+    if (gp && gp[1] > 0) why = gp[0] + " " + gp[1] + "/20";
+    return { key: r.key, label: r.label, blurb: r.blurb, pct: Math.max(0, Math.min(100, pct)), gate: gate, why: why };
+  });
+  out.sort(function (a, b) { return b.pct - a.pct; });
+  return out;
+}
+function roleLabel(key) { return ROLE_BY_KEY[key] ? ROLE_BY_KEY[key].label : (key || "—"); }
+function roleFitRows(fits, topN) {
+  const list = topN ? fits.slice(0, topN) : fits;
+  return list.map(function (f) {
+    const tag = f.gate === "hold" ? " <span class='gate hold'>hold · pastoral</span>" : f.gate === "grow" ? " <span class='gate grow'>grow first</span>" : "";
+    const why = f.why ? " · " + esc(f.why) : "";
+    return "<div class='fit'><div class='fit-h'><span>" + esc(f.label) + tag + "</span><span class='fit-pct'>" + f.pct + "%</span></div>"
+      + "<div class='bar'><i style='width:" + f.pct + "%'></i></div>"
+      + "<div class='fit-b'>" + esc(f.blurb) + why + "</div></div>";
+  }).join("");
+}
+function prefCheckboxes(chosen) {
+  const set = {}; (chosen || []).forEach(function (k) { set[k] = 1; });
+  return ROLE_CATALOGUE.map(function (r) {
+    return "<label class='pick'><input type='checkbox' name='prefrole' value='" + r.key + "'" + (set[r.key] ? " checked" : "") + "><span><b>" + esc(r.label) + "</b><br><small>" + esc(r.blurb) + "</small></span></label>";
+  }).join("");
+}
+function placeOptions(current) {
+  return "<option value=''>— not placed —</option>" + ROLE_CATALOGUE.map(function (r) {
+    return "<option value='" + r.key + "'" + (current === r.key ? " selected" : "") + ">" + esc(r.label) + "</option>";
+  }).join("");
+}
+
 const GHL_BASE = "https://services.leadconnectorhq.com";
 const SUMMARY_FIELD_ID = "Y9fbY2JOAdxPagXxmtVB"; // the "usher_*" contact field
 
@@ -76,6 +159,31 @@ export default {
         return json({ ok: true, home: env.HOME_URL || null });
       }
 
+      // Candidate states where they would love to serve (from their own report).
+      m = p.match(/^\/prefer\/([A-Za-z0-9]+)\/?$/);
+      if (m && request.method === "POST") {
+        const cid = m[1].replace(/[^A-Za-z0-9]/g, "");
+        const b = await request.json().catch(() => ({}));
+        const roles = Array.isArray(b.roles) ? b.roles.filter(function (k) { return ROLE_BY_KEY[k]; }).slice(0, 7) : [];
+        await env.DB.prepare("INSERT INTO usher_submission (contact_id, section, payload, created_at) VALUES (?1,'_preference',?2,?3)")
+          .bind(cid, JSON.stringify({ roles: roles }), Date.now()).run();
+        if (env.GHL_API_TOKEN && cid) { try { await ghlAddTags(env, cid, roles.map(function (k) { return "usher-pref-" + k; })); } catch (e) {} }
+        return json({ ok: true, roles: roles });
+      }
+
+      // Head-Usher / Pastor places the candidate into a role (token-gated).
+      m = p.match(/^\/place\/([A-Za-z0-9]+)\/?$/);
+      if (m && request.method === "POST") {
+        if (!env.PASTORAL_TOKEN || url.searchParams.get("token") !== env.PASTORAL_TOKEN) return json({ ok: false, error: "unauthorised" }, 403);
+        const cid = m[1].replace(/[^A-Za-z0-9]/g, "");
+        const b = await request.json().catch(() => ({}));
+        const role = ROLE_BY_KEY[b.role] ? b.role : null;
+        await env.DB.prepare("INSERT INTO usher_submission (contact_id, section, payload, created_at) VALUES (?1,'_placement',?2,?3)")
+          .bind(cid, JSON.stringify({ role: role, by: "leadership" }), Date.now()).run();
+        if (env.GHL_API_TOKEN && cid && role) { try { await ghlAddTags(env, cid, ["usher-placed", ROLE_BY_KEY[role].tag]); } catch (e) {} }
+        return json({ ok: true, role: role, label: role ? ROLE_BY_KEY[role].label : null });
+      }
+
       m = p.match(/^\/report\/([A-Za-z0-9]+)\/?$/);
       if (m) return renderReport(env, m[1], "candidate");
 
@@ -114,8 +222,14 @@ async function latest(env, cid, section) {
 }
 
 async function renderReport(env, cid, kind) {
-  const [u1, u2, u3] = await Promise.all([latest(env, cid, "u1"), latest(env, cid, "u2"), latest(env, cid, "u3")]);
+  const [u1, u2, u3, prefRow, placeRow] = await Promise.all([
+    latest(env, cid, "u1"), latest(env, cid, "u2"), latest(env, cid, "u3"),
+    latest(env, cid, "_preference"), latest(env, cid, "_placement")
+  ]);
   if (!u1 && !u2 && !u3) return html("<body style='font-family:sans-serif;padding:32px;text-align:center'><h2>Report not ready</h2><p>This profile has not completed the assessment yet.</p></body>", 404);
+  const fits = computeRoleFits(u1, u2, u3);
+  const prefRoles = (prefRow && Array.isArray(prefRow.roles)) ? prefRow.roles : [];
+  const placedRole = placeRow ? placeRow.role : null;
   const tpl = PAGES[kind === "pastoral" ? "pastoral_report.html" : "candidate_report.html"];
   let selfie = (env.R2_PUBLIC_BASE || "") + "/grc-usher-photos/" + cid + ".jpg";
   let name = "", mobile = "", email = "";
@@ -145,7 +259,15 @@ async function renderReport(env, cid, kind) {
     s3_gift_rows: u3 ? u3.top.map(function (g) { return row(g, u3.gifts[g].total + "/20 · " + u3.gifts[g].quad); }).join("") : "",
     role_fit: u3 ? u3.role_fit : (u1 ? ROLE_LEAN[u1.primary] : "—"),
     role_fit_note: "Confirmed by your temperament (Part 1) and gifts (Part 3).",
-    recommended_role: u3 ? u3.role_fit : "", pastoral_action: (u2 && u2.pastoral_flag) ? "Conversation required before placement." : "Cleared for role induction."
+    recommended_role: (fits[0] ? fits[0].label : (u3 ? u3.role_fit : "")),
+    pastoral_action: (u2 && u2.pastoral_flag) ? "Conversation required before placement." : "Cleared for role induction.",
+    // Multi-role selection + placement
+    cid: cid,
+    role_fit_rows: roleFitRows(fits, kind === "pastoral" ? 7 : 4),
+    pref_checkboxes: prefCheckboxes(prefRoles),
+    candidate_pref: prefRoles.length ? prefRoles.map(roleLabel).join(", ") : "— none stated yet —",
+    place_options: placeOptions(placedRole),
+    placement_current: placedRole ? roleLabel(placedRole) : "— not placed —"
   };
   return html(tpl.replace(/\{\{(\w+)\}\}/g, function (_, k) { return (k in V ? String(V[k]) : ""); }));
 }

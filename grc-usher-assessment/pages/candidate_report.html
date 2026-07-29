@@ -28,7 +28,22 @@
   .actions button,.actions a{font-family:var(--fn);cursor:pointer;border:none;border-radius:10px;padding:13px 20px;font-size:.85rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(59,98,97,.22)}
   .btn-pdf{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff}
   .btn-wa{background:#25D366;color:#fff}
-  @media print{.actions{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
+  .fit{padding:10px 0;border-top:1px solid #F1F5F6}
+  .fit:first-child{border-top:none}
+  .fit-h{display:flex;justify-content:space-between;font-size:.9rem;font-weight:700}
+  .fit-pct{color:var(--tdkr)}
+  .bar{height:8px;background:#E7EEEE;border-radius:6px;overflow:hidden;margin:5px 0}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--t2),var(--tdkr))}
+  .fit-b{font-size:.8rem;color:var(--gry)}
+  .gate{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 6px;border-radius:6px;vertical-align:middle}
+  .gate.hold{background:#FFF3EC;color:#a3400f;border:1px solid #F0C9AE}
+  .gate.grow{background:#FFF8E6;color:#8a6d1a;border:1px solid #EAD9A0}
+  .pick{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid #E7EEEE;border-radius:10px;margin-bottom:8px;cursor:pointer}
+  .pick input{margin-top:3px}
+  .pick small{color:var(--gry)}
+  .save{background:linear-gradient(135deg,var(--tdk),var(--tdkr));color:#fff;border:none;border-radius:10px;padding:12px 18px;font-family:var(--fn);font-weight:700;cursor:pointer;font-size:.85rem}
+  .saved{font-size:.8rem;color:var(--tdkr);margin-left:10px}
+  @media print{.actions,#prefsec{display:none!important}body{background:#fff;padding:0}.pg{box-shadow:none;border-radius:0;max-width:100%}}
 </style>
 </head>
 <body>
@@ -59,10 +74,16 @@
   </div>
 
   <div class="sec">
-    <div class="role">
-      <b>Your best-fit serving role:</b><br>{{role_fit}}<br>
-      <span style="font-size:.85rem;color:var(--gry)">{{role_fit_note}}</span>
-    </div>
+    <h2>Your Best-Fit Serving Roles</h2>
+    {{role_fit_rows}}
+    <p style="margin-top:8px;font-size:.82rem;color:var(--gry)">These are suggestions drawn from your profile — your Head Usher makes the final placement.</p>
+  </div>
+
+  <div class="sec" id="prefsec">
+    <h2>Where would you love to serve?</h2>
+    <p style="font-size:.86rem;margin-bottom:10px">Tick any roles you feel drawn to. This shares your heart with your Head Usher — it does not decide your placement.</p>
+    {{pref_checkboxes}}
+    <div style="margin-top:6px"><button type="button" class="save" id="savepref">Save my preference</button><span class="saved" id="prefmsg"></span></div>
   </div>
 
   <div class="actions">
@@ -80,6 +101,14 @@
   (function(){var u=location.href.split('#')[0];
    var msg="My Gateway Revival Church — Usher & Catcher Serve Readiness report:\n"+u;
    var wa=document.getElementById("wa");if(wa)wa.href="https://wa.me/?text="+encodeURIComponent(msg);})();
+  (function(){var cid="{{cid}}";var btn=document.getElementById("savepref");if(!btn)return;
+   btn.addEventListener("click",function(){
+     var roles=[].slice.call(document.querySelectorAll("input[name=prefrole]:checked")).map(function(i){return i.value;});
+     btn.disabled=true;var msg=document.getElementById("prefmsg");msg.textContent="Saving…";
+     fetch("/prefer/"+cid,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({roles:roles})})
+      .then(function(r){return r.json();}).then(function(j){msg.textContent=j.ok?"Saved — thank you!":"Could not save.";btn.disabled=false;})
+      .catch(function(){msg.textContent="Could not save.";btn.disabled=false;});
+   });})();
 </script>
 </body>
 </html>
