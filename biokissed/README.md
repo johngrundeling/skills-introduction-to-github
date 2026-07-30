@@ -21,11 +21,14 @@ white + teal/blue palette, the BioKissed butterfly lockup, "loving nature" tagli
 
 ## Design decisions
 
-- **Bottle** — the gold PURE cap band and metal crown are recoloured warm→teal; a clean
-  synthetic teal band carries the BioKissed lockup + "loving nature"; the original label is
-  fully wiped to white (no ghosting) and re-lettered in Montserrat: **product name** (the
-  reusable template that repeats on every model), a terracotta divider, strength, `Lab Tested`,
-  `For Research Use Only`. White + blue kept as requested.
+- **Bottle** — the gold PURE cap band and metal crown are recoloured warm→teal, then the new
+  BioKissed label is **shrink-wrapped onto the glass** rather than pasted flat: the original
+  label's illumination (its left-to-right cylinder falloff and glossy highlight) is measured
+  and the new artwork is multiplied by that shading, so the teal band and white label curve,
+  shade and reflect like a real printed label — edges feather into the glass. The band carries
+  the BioKissed lockup + "loving nature"; the label is re-lettered in Montserrat: **product
+  name** (the reusable template that repeats on every model), a terracotta divider, strength,
+  `Lab Tested`, `For Research Use Only`. White + blue kept as requested.
 - **Documents** — identical layout, shape and size to the Molecule Co reference, only the
   colours change: navy→teal structure, gold→terracotta accents. Because the bottle is
   white-logo-on-blue, the documents (white background) use the **inverted** blue/teal logo, so
