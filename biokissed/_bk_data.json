@@ -1,0 +1,506 @@
+[
+ {
+  "category": "Tissue Repair & Recovery",
+  "sub": "Peptides studied for healing, recovery and connective-tissue support.",
+  "items": [
+   {
+    "code": "BPC10",
+    "name": "BPC-157 10mg",
+    "desc": "Promotes blood-vessel formation, reduces inflammation and protects cells from damage \u2014 studied to speed the healing response in soft tissue, gut lining and joints.",
+    "price": "R775",
+    "img": "biokissed/images_thumb/BPC10.png"
+   },
+   {
+    "code": "TB10",
+    "name": "TB-500 10mg",
+    "desc": "Promotes migration of stem cells to injured areas, helps form new blood vessels, reduces inflammation and prevents excessive scar tissue; often studied alongside BPC-157 for combined soft-tissue recovery.",
+    "price": "R1,075",
+    "img": "biokissed/images_thumb/TB10.png"
+   },
+   {
+    "code": "CJIP",
+    "name": "CJC-1295 + Ipamorelin",
+    "desc": "CJC-1295 extends how long each natural growth-hormone pulse lasts while Ipamorelin adds extra pulses, together creating a sustained increase in natural GH release \u2014 researched for recovery, body composition and sleep quality.",
+    "price": "R1,025",
+    "img": "biokissed/images_thumb/CJIP.png"
+   },
+   {
+    "code": "CJD10",
+    "name": "CJC-1295 (No DAC) 10mg",
+    "desc": "Extends the duration of the body's natural growth-hormone pulse for more sustained release without shutting down natural production \u2014 a popular short-acting option for GH-pulse research.",
+    "price": "R975",
+    "img": "biokissed/images_thumb/CJD10.png"
+   },
+   {
+    "code": "DSP10",
+    "name": "DSIP 10mg",
+    "desc": "Crosses the blood-brain barrier and interacts with the central nervous system to promote delta-wave (deep, restorative) sleep \u2014 a key subject in sleep-cycle research.",
+    "price": "R975",
+    "img": "biokissed/images_thumb/DSP10.png"
+   },
+   {
+    "code": "IPA10",
+    "name": "Ipamorelin 10mg",
+    "desc": "Mimics ghrelin to selectively stimulate growth-hormone release; studied for increased GH without materially disturbing cortisol or appetite hormones.",
+    "price": "R725",
+    "img": "biokissed/images_thumb/IPA10.png"
+   },
+   {
+    "code": "PIN10",
+    "name": "Pinealon 10mg",
+    "desc": "Investigated for its potential to support neuronal health, cognitive performance and cellular resilience.",
+    "price": "R825",
+    "img": "biokissed/images_thumb/PIN10.png"
+   },
+   {
+    "code": "TB10A",
+    "name": "TB-500 10mg (Alt SKU)",
+    "desc": "Promotes migration of stem cells to injured areas, helps form new blood vessels, reduces inflammation and prevents excessive scar tissue; often studied alongside BPC-157 for combined soft-tissue recovery.",
+    "price": "R1,075",
+    "img": "biokissed/images_thumb/TB10A.png"
+   },
+   {
+    "code": "TB5",
+    "name": "TB-500 5mg",
+    "desc": "Promotes migration of stem cells to injured areas, helps form new blood vessels, reduces inflammation and prevents excessive scar tissue; often studied alongside BPC-157 for combined soft-tissue recovery.",
+    "price": "R775",
+    "img": "biokissed/images_thumb/TB5.png"
+   },
+   {
+    "code": "VIP10",
+    "name": "VIP 10mg",
+    "desc": "Modulates immune responses, reduces inflammatory cytokines, improves gut-barrier function and protects neurons \u2014 studied in gut-immune-brain communication.",
+    "price": "R1,575",
+    "img": "biokissed/images_thumb/VIP10.png"
+   },
+   {
+    "code": "BPC5",
+    "name": "BPC-157 5mg",
+    "desc": "Promotes blood-vessel formation, reduces inflammation and protects cells from damage \u2014 studied to speed the healing response in soft tissue, gut lining and joints.",
+    "price": "R626",
+    "img": "biokissed/images_thumb/BPC5.png"
+   },
+   {
+    "code": "ARA10",
+    "name": "ARA-290 10mg",
+    "desc": "A non-erythropoietic EPO derivative studied for activating the innate repair receptor to reduce inflammation and support nerve and tissue repair.",
+    "price": "R745",
+    "img": "biokissed/images_thumb/ARA10.png"
+   },
+   {
+    "code": "KPV10",
+    "name": "KPV 10mg",
+    "desc": "A tripeptide fragment of alpha-MSH studied for its anti-inflammatory action in the gut and skin and for supporting tissue healing.",
+    "price": "R675",
+    "img": "biokissed/images_thumb/KPV10.png"
+   },
+   {
+    "code": "SRM10",
+    "name": "Sermorelin 10mg",
+    "desc": "A growth-hormone-releasing hormone analogue that signals the pituitary to release growth hormone naturally; studied for recovery, body composition and sleep.",
+    "price": "R1,075",
+    "img": "biokissed/images_thumb/SRM10.png"
+   }
+  ]
+ },
+ {
+  "category": "Metabolic & Weight Management",
+  "sub": "Compounds researched for metabolic, appetite and body-composition pathways.",
+  "items": [
+   {
+    "code": "AOD",
+    "name": "AOD-9604",
+    "desc": "Mimics the way natural growth hormone regulates fat metabolism, helping break down stored fat and prevent new fat formation without the broader effects of full-length GH.",
+    "price": "R896",
+    "img": "biokissed/images_thumb/AOD.png"
+   },
+   {
+    "code": "IGF1",
+    "name": "IGF-1 LR3",
+    "desc": "Binds IGF-1 receptors to support anabolic signalling, protein synthesis, recovery pathways and metabolic regulation over an extended half-life.",
+    "price": "R1,575",
+    "img": "biokissed/images_thumb/IGF1.png"
+   },
+   {
+    "code": "KS10",
+    "name": "Kisspeptin 10mg",
+    "desc": "Activates the hypothalamic-pituitary-gonadal axis, stimulating release of LH and FSH \u2014 a core subject in reproductive-hormone research.",
+    "price": "R975",
+    "img": "biokissed/images_thumb/KS10.png"
+   },
+   {
+    "code": "MS10",
+    "name": "MOTS-c 10mg",
+    "desc": "Improves how mitochondria produce energy, helping cells burn fat and use glucose more efficiently, and activates AMPK \u2014 a key pathway in exercise and metabolic research.",
+    "price": "R815",
+    "img": "biokissed/images_thumb/MS10.png"
+   },
+   {
+    "code": "MS20",
+    "name": "MOTS-c 20mg",
+    "desc": "Improves how mitochondria produce energy, helping cells burn fat and use glucose more efficiently, and activates AMPK \u2014 a key pathway in exercise and metabolic research.",
+    "price": "R1,075",
+    "img": "biokissed/images_thumb/MS20.png"
+   },
+   {
+    "code": "MS40",
+    "name": "MOTS-c 40mg",
+    "desc": "Improves how mitochondria produce energy, helping cells burn fat and use glucose more efficiently, and activates AMPK \u2014 a key pathway in exercise and metabolic research.",
+    "price": "R1,375",
+    "img": "biokissed/images_thumb/MS40.png"
+   },
+   {
+    "code": "NAD500",
+    "name": "NAD+ 500mg",
+    "desc": "Acts as a helper molecule in hundreds of metabolic processes, especially mitochondrial energy production; elevated NAD+ is studied for cellular energy and repair pathways central to longevity research.",
+    "price": "R875",
+    "img": "biokissed/images_thumb/NAD500.png"
+   },
+   {
+    "code": "RT10",
+    "name": "Retatrutide 10mg",
+    "desc": "Activates GIP, GLP-1 and glucagon receptors \u2014 supporting satiety, more effective insulin use and increased energy expenditure; one of the most closely watched compounds in current metabolic research.",
+    "price": "R1,075",
+    "img": "biokissed/images_thumb/RT10.png"
+   },
+   {
+    "code": "RT20",
+    "name": "Retatrutide 20mg",
+    "desc": "Activates GIP, GLP-1 and glucagon receptors \u2014 supporting satiety, more effective insulin use and increased energy expenditure; one of the most closely watched compounds in current metabolic research.",
+    "price": "R1,475",
+    "img": "biokissed/images_thumb/RT20.png"
+   },
+   {
+    "code": "RT30",
+    "name": "Retatrutide 30mg",
+    "desc": "Activates GIP, GLP-1 and glucagon receptors \u2014 supporting satiety, more effective insulin use and increased energy expenditure; one of the most closely watched compounds in current metabolic research.",
+    "price": "R1,775",
+    "img": "biokissed/images_thumb/RT30.png"
+   },
+   {
+    "code": "RT40",
+    "name": "Retatrutide 40mg",
+    "desc": "Activates GIP, GLP-1 and glucagon receptors \u2014 supporting satiety, more effective insulin use and increased energy expenditure; one of the most closely watched compounds in current metabolic research.",
+    "price": "R2,175",
+    "img": "biokissed/images_thumb/RT40.png"
+   },
+   {
+    "code": "TS10",
+    "name": "Tesamorelin 10mg",
+    "desc": "Signals the pituitary gland to release growth hormone naturally rather than introducing GH directly; studied for its effect on visceral belly fat linked to metabolic risk.",
+    "price": "R1,176",
+    "img": "biokissed/images_thumb/TS10.png"
+   },
+   {
+    "code": "TS20",
+    "name": "Tesamorelin 20mg",
+    "desc": "Signals the pituitary gland to release growth hormone naturally rather than introducing GH directly; studied for its effect on visceral belly fat linked to metabolic risk.",
+    "price": "R1,775",
+    "img": "biokissed/images_thumb/TS20.png"
+   },
+   {
+    "code": "TZ",
+    "name": "Tirzepatide",
+    "desc": "Investigated for its potential to support glucose-dependent insulin secretion, appetite regulation and gastric-emptying pathways.",
+    "price": "R1,276",
+    "img": "biokissed/images_thumb/TZ.png"
+   },
+   {
+    "code": "TS5",
+    "name": "Tesamorelin 5mg",
+    "desc": "Signals the pituitary gland to release growth hormone naturally rather than introducing GH directly; studied for its effect on visceral belly fat linked to metabolic risk.",
+    "price": "R926",
+    "img": "biokissed/images_thumb/TS5.png"
+   },
+   {
+    "code": "AMQ5",
+    "name": "5-Amino-1MQ 5mg",
+    "desc": "Investigated for whether influencing NNMT pathways may affect energy expenditure, fat metabolism and body-composition regulation.",
+    "price": "R601",
+    "img": "biokissed/images_thumb/AMQ5.png"
+   },
+   {
+    "code": "LMB10",
+    "name": "Lemon Bottle 10ml",
+    "desc": "A lipolytic solution studied for localised fat breakdown; a research injectable investigated for body-contouring applications.",
+    "price": "R825",
+    "img": "biokissed/images_thumb/LMB10.png"
+   },
+   {
+    "code": "MZ10",
+    "name": "Mazdutide 10mg",
+    "desc": "A dual GLP-1 and glucagon receptor agonist studied for appetite regulation, glucose control and increased energy expenditure.",
+    "price": "R1,575",
+    "img": "biokissed/images_thumb/MZ10.png"
+   },
+   {
+    "code": "NAD1000",
+    "name": "NAD+ 1000mg",
+    "desc": "Acts as a helper molecule in hundreds of metabolic processes, especially mitochondrial energy production; elevated NAD+ is studied for cellular energy and repair pathways central to longevity research.",
+    "price": "R1,275",
+    "img": "biokissed/images_thumb/NAD1000.png"
+   },
+   {
+    "code": "SG10",
+    "name": "Semaglutide 10mg",
+    "desc": "A GLP-1 receptor agonist studied for glucose-dependent insulin secretion, appetite suppression and slowed gastric emptying.",
+    "price": "POA",
+    "img": "biokissed/images_thumb/SG10.png"
+   },
+   {
+    "code": "SG30",
+    "name": "Semaglutide 30mg",
+    "desc": "A GLP-1 receptor agonist studied for glucose-dependent insulin secretion, appetite suppression and slowed gastric emptying.",
+    "price": "POA",
+    "img": "biokissed/images_thumb/SG30.png"
+   },
+   {
+    "code": "SLU5",
+    "name": "SLU-PP-332 5mg",
+    "desc": "An ERR agonist ('exercise mimetic') studied for its potential to increase energy expenditure and fat oxidation without physical exertion.",
+    "price": "POA",
+    "img": "biokissed/images_thumb/SLU5.png"
+   },
+   {
+    "code": "TZ15",
+    "name": "Tirzepatide 15mg",
+    "desc": "Investigated for its potential to support glucose-dependent insulin secretion, appetite regulation and gastric-emptying pathways.",
+    "price": "R975",
+    "img": "biokissed/images_thumb/TZ15.png"
+   },
+   {
+    "code": "TZ30",
+    "name": "Tirzepatide 30mg",
+    "desc": "Investigated for its potential to support glucose-dependent insulin secretion, appetite regulation and gastric-emptying pathways.",
+    "price": "R1,326",
+    "img": "biokissed/images_thumb/TZ30.png"
+   },
+   {
+    "code": "TZ60",
+    "name": "Tirzepatide 60mg",
+    "desc": "Investigated for its potential to support glucose-dependent insulin secretion, appetite regulation and gastric-emptying pathways.",
+    "price": "R1,875",
+    "img": "biokissed/images_thumb/TZ60.png"
+   }
+  ]
+ },
+ {
+  "category": "Longevity & Cellular Health",
+  "sub": "Research compounds explored for cellular ageing, repair and resilience.",
+  "items": [
+   {
+    "code": "EP10",
+    "name": "Epithalon 10mg",
+    "desc": "Activates telomerase to help lengthen telomeres and slow cellular ageing, and regulates melatonin production \u2014 linked to circadian and longevity research.",
+    "price": "R686",
+    "img": "biokissed/images_thumb/EP10.png"
+   },
+   {
+    "code": "EP50",
+    "name": "Epithalon 50mg",
+    "desc": "Activates telomerase to help lengthen telomeres and slow cellular ageing, and regulates melatonin production \u2014 linked to circadian and longevity research.",
+    "price": "R1,175",
+    "img": "biokissed/images_thumb/EP50.png"
+   },
+   {
+    "code": "G5K",
+    "name": "HCG 5000iu",
+    "desc": "Investigated for its ability to stimulate endogenous testosterone production and support reproductive function.",
+    "price": "R775",
+    "img": "biokissed/images_thumb/G5K.png"
+   },
+   {
+    "code": "SLK10",
+    "name": "Selank 10mg",
+    "desc": "Modulates GABA, serotonin and dopamine systems; studied for reducing anxiety and stress without sedation \u2014 a focus of cognitive and stress-response research.",
+    "price": "R896",
+    "img": "biokissed/images_thumb/SLK10.png"
+   },
+   {
+    "code": "THA1",
+    "name": "Thymosin Alpha-1",
+    "desc": "Investigated for its potential to support T-cell maturation, immune signalling and cytokine activity.",
+    "price": "R1,325",
+    "img": "biokissed/images_thumb/THA1.png"
+   },
+   {
+    "code": "SEM10",
+    "name": "Semax 10mg",
+    "desc": "Increases brain-derived neurotrophic factor (BDNF) to promote neuron growth and survival; studied for effects on focus, mood and cognitive performance.",
+    "price": "R896",
+    "img": "biokissed/images_thumb/SEM10.png"
+   },
+   {
+    "code": "SS50",
+    "name": "SS-31 50mg",
+    "desc": "Investigated for its ability to bind cardiolipin within the inner mitochondrial membrane, supporting mitochondrial efficiency and ATP production.",
+    "price": "R1,875",
+    "img": "biokissed/images_thumb/SS50.png"
+   },
+   {
+    "code": "FOX",
+    "name": "FOXO4-DRI",
+    "desc": "Disrupts the FOXO4-p53 interaction to allow apoptosis of senescent ('zombie') cells while largely sparing healthy cells \u2014 a focus of cellular-ageing research.",
+    "price": "R2,175",
+    "img": "biokissed/images_thumb/FOX.png"
+   },
+   {
+    "code": "SS10",
+    "name": "SS-31 10mg",
+    "desc": "Investigated for its ability to bind cardiolipin within the inner mitochondrial membrane, supporting mitochondrial efficiency and ATP production.",
+    "price": "R1,075",
+    "img": "biokissed/images_thumb/SS10.png"
+   },
+   {
+    "code": "GLU600",
+    "name": "Glutathione 600mg",
+    "desc": "The body's master antioxidant, studied for its role in cellular detoxification, oxidative-stress defence and skin brightening.",
+    "price": "R675",
+    "img": "biokissed/images_thumb/GLU600.png"
+   }
+  ]
+ },
+ {
+  "category": "Specialty Combination Stacks",
+  "sub": "Pre-combined blends formulated for convenient multi-pathway research.",
+  "items": [
+   {
+    "code": "WLV10",
+    "name": "Wolverine Blend - BPC-157 + TB-500 10mg (5mg+5mg)",
+    "desc": "A BPC-157 + TB-500 blend (5mg+5mg): BPC-157 targets rapid localised repair of gut, tendons and ligaments while TB-500 promotes whole-body healing, flexibility and blood-vessel formation \u2014 researched for accelerated recovery across multiple tissue types.",
+    "price": "R976",
+    "img": "biokissed/images_thumb/WLV10.png"
+   },
+   {
+    "code": "BT20",
+    "name": "BPC-157 + TB-500 20mg",
+    "desc": "A BPC-157 + TB-500 blend: BPC-157 targets rapid localised repair while TB-500 promotes whole-body healing, flexibility and blood-vessel formation \u2014 researched for accelerated recovery across multiple tissue types.",
+    "price": "R1,376",
+    "img": "biokissed/images_thumb/BT20.png"
+   },
+   {
+    "code": "GLW70",
+    "name": "GLOW Stack 70mg",
+    "desc": "A regeneration and skin-quality stack: GHK-Cu promotes collagen production and skin regeneration while companion peptides support tissue remodelling and structural repair as a combined formula.",
+    "price": "R1,426",
+    "img": "biokissed/images_thumb/GLW70.png"
+   },
+   {
+    "code": "GHK100",
+    "name": "GHK-Cu 100mg",
+    "desc": "Stimulates collagen and elastin production, promotes wound healing, reduces inflammation and acts as a powerful antioxidant; the copper complex is widely researched for skin, hair and tissue-remodelling applications.",
+    "price": "R975",
+    "img": "biokissed/images_thumb/GHK100.png"
+   },
+   {
+    "code": "GHK50",
+    "name": "GHK-Cu 50mg",
+    "desc": "Stimulates collagen and elastin production, promotes wound healing, reduces inflammation and acts as a powerful antioxidant; the copper complex is widely researched for skin, hair and tissue-remodelling applications.",
+    "price": "R775",
+    "img": "biokissed/images_thumb/GHK50.png"
+   },
+   {
+    "code": "KLW80",
+    "name": "KLOW Stack 80mg",
+    "desc": "A KLOW stack: GHK-Cu promotes collagen production and copper delivery for skin and tissue regeneration while partner peptides support recovery, hydration and structural repair as a combined formula.",
+    "price": "R1,626",
+    "img": "biokissed/images_thumb/KLW80.png"
+   }
+  ]
+ },
+ {
+  "category": "Hormonal & Vitality",
+  "sub": "Peptides investigated for hormonal, libido and pigmentation pathways.",
+  "items": [
+   {
+    "code": "MT10",
+    "name": "Melanotan 2 10mg",
+    "desc": "Activates melanocortin receptors in skin cells to trigger melanin production for a protective tan with UV exposure; also studied for effects on appetite and libido.",
+    "price": "R776",
+    "img": "biokissed/images_thumb/MT10.png"
+   },
+   {
+    "code": "PT10",
+    "name": "PT-141 10mg",
+    "desc": "Activates melanocortin receptors in the hypothalamus to trigger natural sexual arousal and desire; unlike some approaches it does not act directly on blood flow.",
+    "price": "R755",
+    "img": "biokissed/images_thumb/PT10.png"
+   },
+   {
+    "code": "SNP10",
+    "name": "Snap-8 10mg",
+    "desc": "Studied for its potential to influence neurotransmitter signalling associated with facial muscle contractions \u2014 a topical, cosmetic-research peptide.",
+    "price": "R675",
+    "img": "biokissed/images_thumb/SNP10.png"
+   }
+  ]
+ },
+ {
+  "category": "Accessories & Consumables",
+  "sub": "Reconstitution and delivery consumables for laboratory use.",
+  "items": [
+   {
+    "code": "BAC",
+    "name": "Bacteriostatic Water",
+    "desc": "Sterile water containing a small amount of benzyl alcohol, used to reconstitute freeze-dried peptides prior to research use. Not a peptide \u2014 an essential laboratory consumable.",
+    "price": "Free",
+    "img": "biokissed/images_thumb/BAC.png"
+   },
+   {
+    "code": "BAC10",
+    "name": "Bacteriostatic Water 10ml",
+    "desc": "Sterile water containing a small amount of benzyl alcohol, used to reconstitute freeze-dried peptides prior to research use. Not a peptide \u2014 an essential laboratory consumable.",
+    "price": "R326",
+    "img": "biokissed/images_thumb/BAC10.png"
+   },
+   {
+    "code": "CRT",
+    "name": "Cartridge",
+    "desc": "Replacement cartridge accessory for compatible pen-style reconstitution and delivery devices.",
+    "price": "R72",
+    "img": "biokissed/images_thumb/CRT.png"
+   },
+   {
+    "code": "DPN",
+    "name": "Disposable Pen",
+    "desc": "Single-use pen device for convenient reconstitution and measured delivery of research compounds.",
+    "price": "R526",
+    "img": "biokissed/images_thumb/DPN.png"
+   }
+  ]
+ },
+ {
+  "category": "Options & Delivery",
+  "sub": "Cold-chain packaging and courier options added at checkout.",
+  "items": [
+   {
+    "code": "ICE",
+    "name": "Ice Pack",
+    "desc": "Reusable ice pack for temperature-controlled shipping of research compounds.",
+    "price": "R35",
+    "img": "biokissed/images_thumb/ICE.png"
+   },
+   {
+    "code": "TBG",
+    "name": "Thermal Bag",
+    "desc": "Insulated thermal bag for temperature-controlled delivery of research compounds.",
+    "price": "R100",
+    "img": "biokissed/images_thumb/TBG.png"
+   },
+   {
+    "code": "DLL",
+    "name": "Delivery Local",
+    "desc": "Local courier delivery within the metro area.",
+    "price": "R145",
+    "img": "biokissed/images_thumb/DLL.png"
+   },
+   {
+    "code": "DLN",
+    "name": "Delivery National",
+    "desc": "National courier delivery across South Africa.",
+    "price": "R249",
+    "img": "biokissed/images_thumb/DLN.png"
+   }
+  ]
+ }
+]
