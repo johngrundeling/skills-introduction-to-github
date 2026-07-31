@@ -1,6 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BioKissed SA — Shop</title><style>
+<title>BioKissed SA — Shop</title>
+<script src="https://js.paystack.co/v2/inline.js"></script><style>
 @font-face{font-family:Montserrat;src:url("assets/Montserrat-Regular.ttf");font-weight:400}
 @font-face{font-family:Montserrat;src:url("assets/Montserrat-Medium.ttf");font-weight:500}
 @font-face{font-family:Montserrat;src:url("assets/Montserrat-SemiBold.ttf");font-weight:600}
@@ -182,13 +183,25 @@ async function pay(){
  const items=cartLines().map(x=>({sku:x.sku,qty:x.qty}));
  if(items.length===0) return showErr("Your cart is empty.");
  const btn=document.getElementById("paybtn"); btn.disabled=true; btn.textContent="Starting secure payment…";
+ const reset=()=>{btn.disabled=false;btn.textContent="Pay with Paystack";};
  try{
   const r=await fetch("/api/pay",{method:"POST",headers:{"content-type":"application/json"},
     body:JSON.stringify({items,customer,delivery:selectedDelivery(),addons:selectedAddons()})});
   const data=await r.json();
-  if(!r.ok||!data.authorization_url){ throw new Error(data.error||"Could not start payment."); }
+  if(!r.ok||!(data.access_code||data.authorization_url)){ throw new Error(data.error||"Could not start payment."); }
+  // Preferred: on-site popup (card, EFT, Capitec Pay, Apple Pay on supported devices).
+  if(window.PaystackPop && data.access_code){
+   const popup=new PaystackPop();
+   popup.resumeTransaction(data.access_code,{
+    onSuccess:(t)=>{ localStorage.removeItem("bk_cart"); location.href="/success.html?reference="+encodeURIComponent(t.reference||data.reference); },
+    onCancel:()=>{ reset(); },
+    onError:(err)=>{ reset(); showErr((err&&err.message)||"Payment could not be completed."); },
+   });
+   return;
+  }
+  // Fallback: full-page hosted checkout (also shows all channels).
   window.location.href=data.authorization_url;
- }catch(e){ btn.disabled=false; btn.textContent="Pay with Paystack"; showErr(e.message); }
+ }catch(e){ reset(); showErr(e.message); }
 }
 function v(id){return (document.getElementById(id)?.value||"").trim();}
 function showErr(m){const e=document.getElementById("err");e.textContent=m;e.style.display="block";}

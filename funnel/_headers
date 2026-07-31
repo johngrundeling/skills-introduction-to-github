@@ -1,0 +1,4 @@
+# Cloudflare Pages headers
+# Apple Pay domain-association must be served as a binary download with no redirect.
+/.well-known/apple-developer-merchantid-domain-association
+  Content-Type: application/octet-stream

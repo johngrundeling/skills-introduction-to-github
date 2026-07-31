@@ -1,0 +1,5 @@
+.env
+.dev.vars
+*.secret
+node_modules/
+_prev.html

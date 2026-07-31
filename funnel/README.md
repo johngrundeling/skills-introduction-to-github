@@ -70,6 +70,40 @@ then `npx wrangler pages secret put PAYSTACK_SECRET_KEY`.
 5. Test with a Paystack **test card**, confirm the order appears in your Paystack dashboard,
    then swap in the **live** secret key and go live.
 
+## Payment channels & Apple Pay
+
+Checkout uses an **on-site popup** (`@paystack/inline-js`, `resumeTransaction(access_code)`),
+with a full-page hosted-checkout **fallback** if the popup script can't load. Both show every
+channel enabled on your Paystack account — **card, EFT, Capitec Pay, Apple Pay** — chosen by
+the customer in the popup. No channel is hard-coded; set `PAYSTACK_CHANNELS="card,eft,apple_pay"`
+only if you want to *restrict* them.
+
+**Apple Pay (on-site popup) requires one-time domain verification:**
+1. Paystack Dashboard → **Settings → Preferences → Apple Pay** → enable it for your web domain.
+2. Download the **domain-association file** Paystack gives you.
+3. Replace the entire contents of `.well-known/apple-developer-merchantid-domain-association`
+   with that file (this repo ships a placeholder). `_headers` already serves it as
+   `application/octet-stream` over HTTPS with no redirect, as Apple requires.
+4. Verify the domain in the Paystack dashboard. Apple Pay then appears automatically for
+   customers on **Safari (iPhone / iPad / Mac)**; it records as an `apple_pay` channel charge.
+
+> The hosted-checkout fallback shows Apple Pay on Paystack's own verified domain even without
+> this file — the file is what enables Apple Pay inside the popup on *your* domain.
+
+## Where credentials live
+
+| Item | Type | Home |
+|------|------|------|
+| `PAYSTACK_SECRET_KEY` | secret | Cloudflare env (encrypted) — Pages **and** reconcile worker |
+| `GHL_API_TOKEN` (BioKissed PIT) | secret | Cloudflare env (encrypted) |
+| Paystack **public** key | not secret | not needed here (server-initialized popup) |
+| `GHL_LOCATION_ID` / `GHL_PIPELINE_ID` / `GHL_STAGE_ID` | not secret | Cloudflare env (plain) |
+| Cloudflare resource IDs | not secret | already in `wrangler.toml` |
+
+Variable names are listed in `.env.example`. Real secrets are **never** committed — `.env`,
+`.dev.vars` and `*.secret` are git-ignored. For local testing, copy `.env.example` to
+`.dev.vars` and run `npx wrangler pages dev`.
+
 ## Custom domain
 
 Add your domain (or a subdomain like `shop.biokissedsa.com`) under the Pages project →

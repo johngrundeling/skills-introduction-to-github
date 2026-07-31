@@ -44,11 +44,15 @@ export async function onRequestPost(context) {
   if (amount <= 0) return json({ error: "Order total must be greater than zero." }, 400);
 
   const origin = new URL(request.url).origin;
+  // channels: leave unset so Paystack shows every enabled channel (card, EFT, Capitec Pay,
+  // Apple Pay …). Set PAYSTACK_CHANNELS="card,eft,apple_pay" to restrict.
+  const channels = (env.PAYSTACK_CHANNELS || "").split(",").map(s => s.trim()).filter(Boolean);
   const payload = {
     email,
     amount: Math.round(amount * 100),            // ZAR -> kobo/cents (Paystack subunit)
     currency: CATALOG.currency,                   // ZAR
     callback_url: `${origin}/success.html`,
+    ...(channels.length ? { channels } : {}),
     metadata: {
       customer_name: customer.name || "",
       phone: customer.phone || "",
@@ -75,7 +79,8 @@ export async function onRequestPost(context) {
   if (!res.ok || !data.status) return json({ error: data.message || "Could not start payment." }, 502);
 
   return json({
-    authorization_url: data.data.authorization_url,
+    authorization_url: data.data.authorization_url,   // fallback: full-page redirect
+    access_code: data.data.access_code,               // preferred: on-site popup (inline-js)
     reference: data.data.reference,
     amount,
   });

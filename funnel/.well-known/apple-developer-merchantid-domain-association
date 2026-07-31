@@ -1,0 +1,17 @@
+REPLACE-THIS-FILE
+--------------------------------------------------------------------
+This is a PLACEHOLDER. Apple Pay domain verification will FAIL until you
+replace the entire contents of this file with the domain-association file
+that Paystack gives you:
+
+  Paystack Dashboard -> Settings -> Preferences (Apple Pay) -> enable Apple
+  Pay for your web domain -> download the domain association file, then paste
+  its exact contents here (overwrite everything, no extra whitespace).
+
+Path served (do not change):  /.well-known/apple-developer-merchantid-domain-association
+Served as: application/octet-stream, over HTTPS, with no redirects (see _headers).
+
+Needed only for the on-site popup (inline) Apple Pay experience on your own
+domain. The full-page hosted-checkout fallback shows Apple Pay on Paystack's
+already-verified domain without this file.
+--------------------------------------------------------------------
