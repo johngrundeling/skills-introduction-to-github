@@ -31,9 +31,19 @@ Set on the **Pages** project (Fulfillment Agent) and on the **reconcile Worker**
 |------|------|-------|
 | `PAYSTACK_SECRET_KEY` | secret | Paystack `sk_test_…` → `sk_live_…` |
 | `GHL_API_TOKEN` | secret | GHL **Private Integration token** for the **BioKissed SA** location |
-| `GHL_LOCATION_ID` | var | BioKissed SA location id |
-| `GHL_PIPELINE_ID` | var | BioKissed orders pipeline id |
-| `GHL_STAGE_ID` | var | Target stage (e.g. "Paid") |
+| `GHL_LOCATION_ID` | var | `fktk4QrXVBq8Y3MojJRz` (BioKissed SA) |
+| `GHL_PIPELINE_ID` | var | `0Ntnfu1vMFOriKKV9tr3` ("BioKissed SA - Sales Pipeline") |
+| `GHL_STAGE_ID` | var | `dea558df-5a9c-483a-b7b1-5156be62a70a` (stage "Won") |
+
+> Non-secret IDs above are confirmed live from the BioKissed SA location. Only
+> `GHL_API_TOKEN` (a Private Integration token) is still needed — create it in
+> GHL → Settings → Private Integrations, scoped to contacts + opportunities.
+
+### Why the funnel isn't built *inside* GHL
+GHL's API exposes no funnel/page-builder endpoint (funnels are UI-only), and a GHL-native
+funnel would use GHL's own checkout (Stripe/NMI) rather than Paystack. The Cloudflare funnel
+is therefore the storefront; it links into GHL through the Fulfillment Agent above, which
+drops every paid order into the BioKissed pipeline as a **Won** opportunity.
 
 ## Two blockers before go-live
 
