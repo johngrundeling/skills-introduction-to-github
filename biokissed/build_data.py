@@ -75,7 +75,7 @@ def write_ghl(rows):
         for r in rows:
             oos = r["_price"] == "POA"
             price = "" if oos else f'{float(r["Price"]):.2f}'
-            w.writerow([r["_code"].lower(), f'{r["_code"]} - {r["_name"]}', r["Description"],
+            w.writerow(["bk-"+r["_code"].lower(), f'{r["_code"]} - {r["_name"]}', r["Description"],
                         "FALSE" if oos else "TRUE", r["_img"], "Title", "Default Title",
                         "", "", "", "", price, "", "FALSE", "TRUE", "", r["_code"],
                         "", "", "", "", "", "", "FALSE", "", "", "",
