@@ -1,0 +1,8 @@
+name = "biokissed-funnel"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "."
+
+# Cloudflare Pages project for the BioKissed SA shop funnel.
+# Static assets are served from this directory; Pages Functions live in ./functions.
+# The Paystack secret is NOT stored here — set it as an encrypted env var in the
+# Cloudflare dashboard (or:  npx wrangler pages secret put PAYSTACK_SECRET_KEY).

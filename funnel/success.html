@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BioKissed SA — Order</title><style>
+@font-face{font-family:Montserrat;src:url("assets/Montserrat-Regular.ttf");font-weight:400}
+@font-face{font-family:Montserrat;src:url("assets/Montserrat-SemiBold.ttf");font-weight:600}
+@font-face{font-family:Montserrat;src:url("assets/Montserrat-Bold.ttf");font-weight:700}
+*{box-sizing:border-box}
+:root{--ink:#1a2a49;--mut:#6e7a84;--acc:#5e7e92;--acc2:#9f6652;--line:#e2e9ec;--ok:#2f8f5b}
+body{margin:0;font:16px/1.55 Montserrat,system-ui,sans-serif;background:#f4f7f8;color:var(--ink);
+ display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+.box{background:#fff;border:1px solid var(--line);border-radius:16px;max-width:520px;width:100%;
+ padding:34px;text-align:center;box-shadow:0 12px 40px #1a2a4914}
+img{height:44px;margin-bottom:18px}
+.icon{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff}
+.ok{background:var(--ok)}.bad{background:#c0453b}.wait{background:var(--acc)}
+h1{font-size:22px;margin:0 0 6px}p{color:var(--mut);margin:6px 0}
+.ref{font-family:monospace;background:#f0f4f5;padding:3px 8px;border-radius:6px;font-size:13px}
+.amt{font-size:26px;font-weight:700;color:var(--acc);margin:10px 0}
+.items{text-align:left;border-top:1px solid var(--line);margin-top:18px;padding-top:14px;font-size:14px}
+.items div{display:flex;justify-content:space-between;padding:3px 0}
+a.btn{display:inline-block;margin-top:20px;background:var(--acc);color:#fff;text-decoration:none;
+ font-weight:700;padding:11px 22px;border-radius:10px}
+</style></head><body>
+<div class="box" id="box">
+ <img src="assets/logo_lockup_teal.png" alt="BioKissed SA">
+ <div class="icon wait" id="icon">⋯</div>
+ <h1 id="title">Confirming your payment…</h1>
+ <p id="msg">Please wait a moment.</p>
+ <div id="detail"></div>
+ <a class="btn" href="/">Back to shop</a>
+</div>
+<script>
+const fmt=n=>"R"+Number(n).toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2});
+const params=new URLSearchParams(location.search);
+const ref=params.get("reference")||params.get("trxref");
+const icon=document.getElementById("icon"),title=document.getElementById("title"),
+      msg=document.getElementById("msg"),detail=document.getElementById("detail");
+async function run(){
+ if(!ref){ fail("No payment reference found."); return; }
+ try{
+  const r=await fetch("/api/verify?reference="+encodeURIComponent(ref));
+  const d=await r.json();
+  if(r.ok&&d.paid){
+   localStorage.removeItem("bk_cart");
+   icon.className="icon ok"; icon.textContent="✓";
+   title.textContent="Payment successful — thank you!";
+   msg.innerHTML='Your order is confirmed. Reference <span class="ref">'+d.reference+'</span>. A receipt has been emailed to you.';
+   let items=(d.items||[]).map(i=>'<div><span>'+(i.qty)+'× '+i.name+'</span><span>'+fmt((i.unit||0)*(i.qty||1))+'</span></div>').join("");
+   detail.innerHTML='<div class="amt">'+fmt(d.amount)+'</div>'+(items?'<div class="items">'+items+'</div>':'');
+  } else if(r.ok){ fail("This payment was not completed. Reference "+ref+"."); }
+  else { fail(d.error||"We could not confirm this payment."); }
+ }catch(e){ fail("We could not confirm this payment right now. Reference "+ref+"."); }
+}
+function fail(m){ icon.className="icon bad"; icon.textContent="!"; title.textContent="Payment not confirmed"; msg.textContent=m; }
+run();
+</script>
+</body></html>
