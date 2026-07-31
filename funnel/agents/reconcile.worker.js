@@ -27,6 +27,10 @@ async function createOpportunity(env, o, contactId) {
   if (!r.ok) throw new Error(`opportunity ${r.status}: ${d.message || ""}`);
   return d.opportunity?.id || d.id;
 }
+async function addContactNote(env, contactId, text) {
+  if (!contactId) return;
+  await fetch(`${GHL}/contacts/${contactId}/notes`, { method: "POST", headers: ghlHdrs(env.GHL_API_TOKEN), body: JSON.stringify({ body: text }) });
+}
 
 async function retryUnsynced(env) {
   if (!env.DB || !env.GHL_API_TOKEN || !env.GHL_LOCATION_ID) return { attempted: 0, fixed: 0 };
@@ -37,6 +41,7 @@ async function retryUnsynced(env) {
     try {
       const cid = await upsertContact(env, o);
       const oid = await createOpportunity(env, o, cid);
+      try { await addContactNote(env, cid, `🧾 BioKissed order ${o.reference} — R${Number(o.amount).toFixed(2)} (synced by reconcile)`); } catch {}
       await env.DB.prepare("UPDATE orders SET ghl_contact_id=?, ghl_opportunity_id=?, ghl_synced=1 WHERE reference=?")
         .bind(cid || null, oid || null, o.reference).run();
       fixed++;

@@ -5,7 +5,7 @@
 //   3. is idempotent by Paystack reference, so retries never double-post.
 // If GHL isn't configured or is down, the order is still safely stored with ghl_synced=0
 // and the Reconciliation Agent retries it later.
-import { ghlConfigured, upsertContact, createOpportunity } from "../_ghl.js";
+import { ghlConfigured, upsertContact, createOpportunity, addContactNote } from "../_ghl.js";
 
 const enc = new TextEncoder();
 async function hmacSha512Hex(key, message) {
@@ -65,6 +65,16 @@ export async function onRequestPost(context) {
         contactId, amount: order.amount, reference: order.reference,
         name: `BioKissed order ${order.reference} — ${order.items.map(i => `${i.qty}×${i.name}`).join(", ")}`.slice(0, 250),
       });
+      // put the full order on the contact's CRM timeline (best-effort)
+      const noteLines = [
+        `🧾 BioKissed order — ${order.reference}`,
+        ...order.items.map(i => `  • ${i.qty}× ${i.name} @ R${Number(i.unit).toFixed(2)}`),
+        `Total: R${Number(order.amount).toFixed(2)} (${order.currency})`,
+        order.address ? `Deliver to: ${[order.address, order.city].filter(Boolean).join(", ")}` : "",
+        order.phone ? `Phone: ${order.phone}` : "",
+        `Paid: ${order.paid_at}`,
+      ].filter(Boolean).join("\n");
+      try { await addContactNote(env, contactId, noteLines); } catch (e) { console.log("note failed:", e.message); }
       if (env.DB) await env.DB.prepare(
         "UPDATE orders SET ghl_contact_id=?, ghl_opportunity_id=?, ghl_synced=1 WHERE reference=?")
         .bind(contactId || null, opportunityId || null, order.reference).run().catch(() => {});

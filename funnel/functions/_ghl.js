@@ -37,6 +37,17 @@ export async function upsertContact(env, c) {
   return d.contact?.id || d.id || d.contact?.contactId;
 }
 
+// Drop the order onto the contact's activity feed as a note, so it sits in the CRM timeline
+// next to all other client communication. Best-effort (never blocks the order).
+export async function addContactNote(env, contactId, text) {
+  if (!contactId) return;
+  const r = await fetch(`${BASE}/contacts/${contactId}/notes`, {
+    method: "POST", headers: HDRS(env.GHL_API_TOKEN),
+    body: JSON.stringify({ body: text }),
+  });
+  if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(`GHL note failed: ${d.message || r.status}`); }
+}
+
 // Open an opportunity (order) in the BioKissed pipeline, marked won, valued at the order total.
 export async function createOpportunity(env, { contactId, name, amount, reference }) {
   const body = {

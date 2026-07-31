@@ -27,7 +27,11 @@ a.btn{display:inline-block;margin-top:20px;background:var(--acc);color:#fff;text
  <h1 id="title">Confirming your payment…</h1>
  <p id="msg">Please wait a moment.</p>
  <div id="detail"></div>
- <a class="btn" href="/">Back to shop</a>
+ <p id="intakemsg" style="display:none;margin-top:18px;font-size:14px;color:var(--ink)">
+   One more step — please complete your quick intake form so we can serve you properly:</p>
+ <a class="btn" id="intakebtn" style="display:none;background:var(--acc2)"
+    href="https://link.dnasupersystems.com/widget/form/H9WP9HKY2ZGQb7xBKOPv" target="_blank" rel="noopener">Complete intake form</a>
+ <div style="margin-top:14px"><a class="btn" href="/">Back to shop</a></div>
 </div>
 <script>
 const fmt=n=>"R"+Number(n).toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -47,6 +51,8 @@ async function run(){
    msg.innerHTML='Your order is confirmed. Reference <span class="ref">'+d.reference+'</span>. A receipt has been emailed to you.';
    let items=(d.items||[]).map(i=>'<div><span>'+(i.qty)+'× '+i.name+'</span><span>'+fmt((i.unit||0)*(i.qty||1))+'</span></div>').join("");
    detail.innerHTML='<div class="amt">'+fmt(d.amount)+'</div>'+(items?'<div class="items">'+items+'</div>':'');
+   document.getElementById("intakemsg").style.display="block";
+   document.getElementById("intakebtn").style.display="inline-block";
   } else if(r.ok){ fail("This payment was not completed. Reference "+ref+"."); }
   else { fail(d.error||"We could not confirm this payment."); }
  }catch(e){ fail("We could not confirm this payment right now. Reference "+ref+"."); }

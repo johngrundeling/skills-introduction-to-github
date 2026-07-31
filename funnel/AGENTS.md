@@ -14,6 +14,21 @@ is complete and the data stores exist. Two things gate go-live (below).
 Design principle: **capture first, sync second.** Money events are recorded in D1 immediately;
 GHL sync is best-effort and self-healing via the reconciliation agent.
 
+### The customer record always lands in BioKissed GHL
+Every paid order writes to GHL, not just to Cloudflare:
+- **Contact** — upserted, deduped by **email + phone** (the location's unique identifiers). A buyer
+  who already filled the **intake form** (`link.dnasupersystems.com/widget/form/H9WP9HKY2ZGQb7xBKOPv`)
+  merges into the *same* contact, so order history and all CRM communication stay on one record.
+- **Opportunity** — a **Won** deal in "BioKissed SA - Sales Pipeline", valued at the order total.
+- **Note** — the full itemised order is added to the contact's timeline, next to the client's
+  conversations, so nothing lives only in Cloudflare.
+- Tags `biokissed`, `online-order`, `paid` are applied for segmentation/automation.
+
+The Cloudflare **D1 ledger is a safety backup only** — the authoritative customer + order record
+is in GHL. If GHL is briefly unreachable, the order is held in D1 and the reconciliation agent
+pushes it into GHL on the next run (contact + opportunity + note). The thank-you page also invites
+the buyer to complete the intake form, funnelling them into the CRM.
+
 ## Cloudflare resources already created (this account)
 
 | Resource | Name | ID |
