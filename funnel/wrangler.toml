@@ -4,5 +4,24 @@ pages_build_output_dir = "."
 
 # Cloudflare Pages project for the BioKissed SA shop funnel.
 # Static assets are served from this directory; Pages Functions live in ./functions.
-# The Paystack secret is NOT stored here — set it as an encrypted env var in the
-# Cloudflare dashboard (or:  npx wrangler pages secret put PAYSTACK_SECRET_KEY).
+#
+# SECRETS (set in the Pages dashboard → Settings → Environment variables, or
+#   `npx wrangler pages secret put <NAME>` — never commit these):
+#   PAYSTACK_SECRET_KEY   Paystack secret (sk_test_… then sk_live_…)
+#   GHL_API_TOKEN         GHL Private Integration token for the BioKissed SA location
+#
+# NON-SECRET VARS (Pages dashboard → Environment variables, plain):
+#   GHL_LOCATION_ID       BioKissed SA location id (NOT Career Legends)
+#   GHL_PIPELINE_ID       BioKissed orders pipeline id
+#   GHL_STAGE_ID          target stage id (e.g. "Paid")
+
+# D1 order ledger (biokissed-orders)
+[[d1_databases]]
+binding = "DB"
+database_name = "biokissed-orders"
+database_id = "a02ffd09-0bca-4787-ab7d-1219a7b6c5d8"
+
+# KV (idempotency / config)
+[[kv_namespaces]]
+binding = "KV"
+id = "74d5ca6b2b5842528c696302ad6ff63a"
