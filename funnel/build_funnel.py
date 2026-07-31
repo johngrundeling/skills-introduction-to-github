@@ -5,6 +5,7 @@ public key is never needed client-side (the server initializes and returns the U
 import json, os, base64, html, csv
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+PUBLIC = os.path.join(ROOT, "public"); os.makedirs(PUBLIC, exist_ok=True)
 MASTER = os.path.join(ROOT, "..", "biokissed", "biokissed-products.csv")
 BRANCH = "claude/catalog-product-codes-kkncc3"
 WEB = f"https://raw.githubusercontent.com/johngrundeling/skills-introduction-to-github/refs/heads/{BRANCH}/biokissed/images"
@@ -24,11 +25,11 @@ def build_catalog():
     with open(os.path.join(ROOT, "functions/_catalog.js"), "w") as f:
         f.write("// AUTO-GENERATED trusted catalog — the server computes order totals from THIS, never the client.\n")
         f.write("export const CATALOG = " + json.dumps(catalog, ensure_ascii=False) + ";\n")
-    json.dump(catalog, open(os.path.join(ROOT, "_catalog.json"), "w"), ensure_ascii=False)
+    json.dump(catalog, open(os.path.join(PUBLIC, "_catalog.json"), "w"), ensure_ascii=False)
     return catalog
 
 cat = build_catalog()
-logo_b64 = base64.b64encode(open(os.path.join(ROOT, "assets/logo_lockup_teal.png"), "rb").read()).decode()
+logo_b64 = base64.b64encode(open(os.path.join(PUBLIC, "assets/logo_lockup_teal.png"), "rb").read()).decode()
 
 DATA_JS = "const CATALOG = " + json.dumps(cat, ensure_ascii=False) + ";"
 
@@ -245,5 +246,5 @@ renderShop(); updateCount();
 </body></html>"""
 
 out = PAGE.replace("__LOGO__", logo_b64).replace("__DATA__", DATA_JS)
-open(os.path.join(ROOT, "index.html"), "w").write(out)
-print("wrote index.html", len(out), "bytes")
+open(os.path.join(PUBLIC, "index.html"), "w").write(out)
+print("wrote public/index.html", len(out), "bytes")

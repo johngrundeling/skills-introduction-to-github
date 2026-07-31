@@ -81,7 +81,7 @@ only if you want to *restrict* them.
 **Apple Pay (on-site popup) requires one-time domain verification:**
 1. Paystack Dashboard → **Settings → Preferences → Apple Pay** → enable it for your web domain.
 2. Download the **domain-association file** Paystack gives you.
-3. Replace the entire contents of `.well-known/apple-developer-merchantid-domain-association`
+3. Replace the entire contents of `public/.well-known/apple-developer-merchantid-domain-association`
    with that file (this repo ships a placeholder). `_headers` already serves it as
    `application/octet-stream` over HTTPS with no redirect, as Apple requires.
 4. Verify the domain in the Paystack dashboard. Apple Pay then appears automatically for

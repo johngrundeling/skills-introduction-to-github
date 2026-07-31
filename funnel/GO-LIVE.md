@@ -20,43 +20,43 @@ Do the steps in order. Values you'll paste are listed in **§0**. Anything marke
 
 ---
 
-## 1. Deploy the Cloudflare Pages project
+> You are using the **Workers** "deploy from Git" flow (it runs `npx wrangler deploy`). The repo
+> is now set up for exactly that — a Worker named `biokissed-funnel-r1` that serves the shop and
+> runs the payment API. The database/KV bindings and the non-secret GHL IDs are already in
+> `funnel/wrangler.toml`, so they deploy automatically. You only fix a few build fields and add
+> **two** secrets.
 
-1. Go to **dash.cloudflare.com** → left sidebar **Workers & Pages**.
-2. **Create** → **Pages** tab → **Connect to Git**.
-3. **Connect GitHub** (authorize if asked) → pick repo **`skills-introduction-to-github`** → **Begin setup**.
-4. **Project name:** `biokissed-funnel`.
-5. **Production branch:** `claude/catalog-product-codes-kkncc3` (switch to `main` after the PR merges).
-6. Expand **Build settings**:
-   - **Framework preset:** `None`
-   - **Build command:** *(leave empty)*
-   - **Build output directory:** `.`
-   - **Root directory (advanced):** `funnel`
-7. **Save and Deploy.** Wait for "Success". You now have a live URL like `biokissed-funnel.pages.dev`.
+## 1. Fix the build settings on your `biokissed-funnel-r1` project
 
-## 2. Bind the database + KV (order ledger)
+Open the project → the failing build → **Build settings** (pencil/Edit), and set:
+- **Git branch / Production branch:** `claude/catalog-product-codes-kkncc3`
+  *(the `funnel` folder only exists on this branch until the PR is merged to `main`)*
+- **Build command:** *(empty — delete the branch name that's in there)*
+- **Deploy command:** `npx wrangler deploy`
+- **Root directory:** `funnel`   *(NOT `/shop.biokissedsa.com` — that's what caused "root directory not found")*
 
-1. Open the project → **Settings** → **Functions** (newer UI: **Bindings**).
-2. **D1 database bindings → Add**: Variable name **`DB`** → database **`biokissed-orders`** → Save.
-3. **KV namespace bindings → Add**: Variable name **`KV`** → namespace **`biokissed-funnel`** → Save.
+**Save**, then **Retry build**. It should now Clone → Build → Deploy successfully.
 
-## 3. Environment variables & secrets
+## 2. Database / KV — nothing to do
 
-1. Project → **Settings** → **Environment variables** → **Production** → **Add variable** for each:
-   - `PAYSTACK_SECRET_KEY` = your `sk_…` → click **Encrypt** 🔒
-   - `GHL_API_TOKEN` = your token → **Encrypt** 🔒
-   - `GHL_LOCATION_ID` = `fktk4QrXVBq8Y3MojJRz`
-   - `GHL_PIPELINE_ID` = `0Ntnfu1vMFOriKKV9tr3`
-   - `GHL_STAGE_ID` = `dea558df-5a9c-483a-b7b1-5156be62a70a`
-2. **Save**, then **Deployments → ⋯ on the latest → Retry deployment** so the values load.
+`funnel/wrangler.toml` already binds **DB → biokissed-orders** and **KV → biokissed-funnel**, and
+sets the GHL location/pipeline/stage. They apply on deploy automatically.
+
+## 3. Add the two secrets
+
+Project → **Settings** → **Variables and Secrets** → **Add**:
+- `PAYSTACK_SECRET_KEY` = your `sk_test_…` → type **Secret** (encrypted) 🔒
+- `GHL_API_TOKEN` = your BioKissed Private Integration token → type **Secret** 🔒
+
+**Save**, then **Retry build / Deploy** once more so the secrets are included.
 
 ## 4. Custom domain
 
-1. Project → **Custom domains** → **Set up a custom domain**.
-2. Enter **`shop.biokissedsa.com`** → **Continue** → **Activate domain**.
-3. DNS:
-   - If **biokissedsa.com is on Cloudflare DNS**, the record is added automatically — wait for **Active**.
-   - If DNS is **elsewhere**, add a **CNAME**: name `shop`, target `biokissed-funnel.pages.dev`, then return and wait for **Active** (SSL is automatic).
+1. Open the Worker → **Settings** → **Domains & Routes** → **Add** → **Custom domain**.
+2. Enter **`shop.biokissedsa.com`** → **Add domain**.
+3. If **biokissedsa.com is on Cloudflare DNS** the record is created automatically — wait for **Active**.
+   If DNS is elsewhere, add the CNAME Cloudflare shows you at your DNS host, then wait for **Active**
+   (SSL is automatic). Your funnel is then live at `https://shop.biokissedsa.com`.
 
 ## 5. Paystack webhook
 
@@ -68,7 +68,7 @@ Do the steps in order. Values you'll paste are listed in **§0**. Anything marke
 1. **Paystack** → **Settings** → **Preferences** → **Apple Pay** (enable it / "Add domain" — contact Paystack support to switch it on if the section isn't visible).
 2. Add domain **`shop.biokissedsa.com`** → **download the domain-association file** Paystack gives you.
 3. Put that file into the site: open
-   `funnel/.well-known/apple-developer-merchantid-domain-association` in the repo, **replace the
+   `funnel/public/.well-known/apple-developer-merchantid-domain-association` in the repo, **replace the
    whole file** with Paystack's contents, commit & push (Pages redeploys automatically).
    *(Or send me the file contents — it isn't secret — and I'll commit it for you.)*
 4. Back in Paystack → **Verify** the domain. Once verified, Apple Pay shows automatically on

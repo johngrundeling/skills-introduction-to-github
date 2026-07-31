@@ -1,21 +1,16 @@
-name = "biokissed-funnel"
+# BioKissed funnel — Cloudflare Worker (deployed with: npx wrangler deploy)
+# Static site in ./public + API routes in worker.js. Set the Cloudflare build's
+# Root directory to "funnel" and leave the Build command empty.
+name = "biokissed-funnel-r1"
+main = "worker.js"
 compatibility_date = "2024-11-01"
-pages_build_output_dir = "."
 
-# Cloudflare Pages project for the BioKissed SA shop funnel.
-# Static assets are served from this directory; Pages Functions live in ./functions.
-#
-# SECRETS (set in the Pages dashboard → Settings → Environment variables, or
-#   `npx wrangler pages secret put <NAME>` — never commit these):
-#   PAYSTACK_SECRET_KEY   Paystack secret (sk_test_… then sk_live_…)
-#   GHL_API_TOKEN         GHL Private Integration token for the BioKissed SA location
-#
-# NON-SECRET VARS (Pages dashboard → Environment variables, plain):
-#   GHL_LOCATION_ID       BioKissed SA location id (NOT Career Legends)
-#   GHL_PIPELINE_ID       BioKissed orders pipeline id
-#   GHL_STAGE_ID          target stage id (e.g. "Paid")
+# Static assets (index.html, success.html, assets/, .well-known/, …) served automatically.
+[assets]
+directory = "./public"
+binding = "ASSETS"
 
-# D1 order ledger (biokissed-orders)
+# D1 order ledger
 [[d1_databases]]
 binding = "DB"
 database_name = "biokissed-orders"
@@ -25,3 +20,13 @@ database_id = "a02ffd09-0bca-4787-ab7d-1219a7b6c5d8"
 [[kv_namespaces]]
 binding = "KV"
 id = "74d5ca6b2b5842528c696302ad6ff63a"
+
+# SECRETS are NOT set here — add them in the dashboard (Worker → Settings → Variables and
+# Secrets) or with `npx wrangler secret put <NAME>`:
+#   PAYSTACK_SECRET_KEY   (encrypt)   sk_test_… then sk_live_…
+#   GHL_API_TOKEN         (encrypt)   BioKissed Private Integration token
+# Non-secret vars are set here so they deploy automatically (only the 2 secrets are manual).
+[vars]
+GHL_LOCATION_ID = "fktk4QrXVBq8Y3MojJRz"
+GHL_PIPELINE_ID = "0Ntnfu1vMFOriKKV9tr3"
+GHL_STAGE_ID    = "dea558df-5a9c-483a-b7b1-5156be62a70a"
