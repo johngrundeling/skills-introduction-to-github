@@ -21,12 +21,12 @@ Do the steps in order. Values you'll paste are listed in **§0**. Anything marke
 ---
 
 > You are using the **Workers** "deploy from Git" flow (it runs `npx wrangler deploy`). The repo
-> is now set up for exactly that — a Worker named `biokissed-funnel-r1` that serves the shop and
+> is now set up for exactly that — a Worker named `biokissed-funnel` that serves the shop and
 > runs the payment API. The database/KV bindings and the non-secret GHL IDs are already in
 > `funnel/wrangler.toml`, so they deploy automatically. You only fix a few build fields and add
 > **two** secrets.
 
-## 1. Fix the build settings on your `biokissed-funnel-r1` project
+## 1. Fix the build settings on your `biokissed-funnel` project
 
 Open the project → the failing build → **Build settings** (pencil/Edit), and set:
 - **Git branch / Production branch:** `claude/catalog-product-codes-kkncc3`

@@ -1,7 +1,7 @@
 # BioKissed funnel — Cloudflare Worker (deployed with: npx wrangler deploy)
 # Static site in ./public + API routes in worker.js. Set the Cloudflare build's
 # Root directory to "funnel" and leave the Build command empty.
-name = "biokissed-funnel-r1"
+name = "biokissed-funnel"
 main = "worker.js"
 compatibility_date = "2024-11-01"
 
