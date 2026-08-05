@@ -15,11 +15,13 @@ from reportlab.pdfgen import canvas as canvasmod
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-MODE = sys.argv[1] if len(sys.argv) > 1 else "cust"   # 'cust' | 'internal'
+MODE = sys.argv[1] if len(sys.argv) > 1 else "cust"   # 'cust' | 'internal' | 'reseller'
 INTERNAL = MODE == "internal"
+RESELLER = MODE == "reseller"
+SHOW_CODES = INTERNAL or RESELLER
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-data = json.load(open(os.path.join(ROOT, "_bk_data.json")))
+data = json.load(open(os.path.join(ROOT, "_bk_reseller_data.json" if RESELLER else "_bk_data.json")))
 AST = os.path.join(ROOT, "assets")
 LOGO = os.path.join(AST, "logo_lockup_teal.png")
 ICON = os.path.join(AST, "butterfly_teal.png")
@@ -74,7 +76,8 @@ story.append(Spacer(1, 3 * mm))
 story.append(Paragraph("loving nature", S("tag", fontName="MT-Md", fontSize=12, textColor=TEAL, alignment=TA_CENTER, spaceAfter=10)))
 story.append(Paragraph("R E S E A R C H&nbsp;&nbsp; C O M P O U N D&nbsp;&nbsp; C A T A L O G U E",
                        S("t2", fontName="MT-Bd", fontSize=14, textColor=TERRA, alignment=TA_CENTER, spaceAfter=4)))
-story.append(Paragraph("Internal Price Schedule" if INTERNAL else "Price Schedule",
+_subtitle = "Reseller Price Schedule" if RESELLER else ("Internal Price Schedule" if INTERNAL else "Price Schedule")
+story.append(Paragraph(_subtitle,
                        S("t3", fontName="MT-Md", fontSize=13, textColor=TEAL, alignment=TA_CENTER)))
 story.append(Spacer(1, 5 * mm))
 story.append(HRule(CONTENT, TERRA, 1.1, 0))
@@ -84,7 +87,11 @@ story.append(Paragraph("Pricing in South African Rand (ZAR),", S("t5", fontName=
 story.append(Paragraph("Reconstituted (Pen).", S("t5b", fontName="MT-Bd", fontSize=15, textColor=NAVY, alignment=TA_CENTER, spaceAfter=14)))
 story.append(Paragraph("Excludes courier delivery.", S("t6", fontName="MT", fontSize=10.5, textColor=MUT, alignment=TA_CENTER, spaceAfter=1)))
 story.append(Paragraph("Subject to change without notice.", S("t7", fontName="MT", fontSize=10.5, textColor=MUT, alignment=TA_CENTER)))
-if INTERNAL:
+if RESELLER:
+    story.append(Spacer(1, 10 * mm))
+    story.append(Paragraph("RESELLER PRICING — for approved resellers only (retail +25%; product codes shown)",
+                           S("conf", fontName="MT-Sb", fontSize=9, textColor=TERRA, alignment=TA_CENTER)))
+elif INTERNAL:
     story.append(Spacer(1, 10 * mm))
     story.append(Paragraph("CONFIDENTIAL — INTERNAL USE (product codes shown)",
                            S("conf", fontName="MT-Sb", fontSize=9, textColor=TERRA, alignment=TA_CENTER)))
@@ -102,10 +109,11 @@ for gi, g in enumerate(data):
     story.append(Paragraph(f'{gi+1}.&nbsp;&nbsp;{g["category"]}', cat_st))
     story.append(HRule(CONTENT, TERRA, 1.1, 1))
     story.append(Paragraph(g["sub"], sub_st))
-    rows = [[Paragraph("Image", head_c), Paragraph("Product &amp; Research Notes", head_st), Paragraph("Retail (ZAR)", head_c)]]
+    _pricehead = "Reseller (ZAR)" if RESELLER else "Retail (ZAR)"
+    rows = [[Paragraph("Image", head_c), Paragraph("Product &amp; Research Notes", head_st), Paragraph(_pricehead, head_c)]]
     for item in g["items"]:
         note = [Paragraph(item["name"], name_st)]
-        if INTERNAL:
+        if SHOW_CODES:
             note.append(Paragraph("Product Code: " + item["code"], code_st))
         note.append(Paragraph(item["desc"], desc_st))
         price = Paragraph(item["price"], poa_st if item["price"] in ("POA",) else price_st)
@@ -149,13 +157,15 @@ class NumberedCanvas(canvasmod.Canvas):
         self.line(MARGIN, PAGE_H - MARGIN - 11*mm, PAGE_W - MARGIN, PAGE_H - MARGIN - 11*mm)
         self.line(MARGIN, MARGIN - 2*mm, PAGE_W - MARGIN, MARGIN - 2*mm)
         self.setFont("MT", 8); self.setFillColor(MUT)
-        tag = "Research Use Only — Prices ZAR" + ("  ·  Internal" if INTERNAL else "")
+        tag = "Research Use Only — Prices ZAR" + ("  ·  Reseller" if RESELLER else ("  ·  Internal" if INTERNAL else ""))
         self.drawString(MARGIN, MARGIN - 6*mm, tag)
         self.drawRightString(PAGE_W - MARGIN, MARGIN - 6*mm, f"Page {self._pageNumber} of {total}")
 
 frame = Frame(MARGIN, MARGIN + 4*mm, CONTENT, PAGE_H - 2*MARGIN - 15*mm, id="main", topPadding=6)
 title_frame = Frame(MARGIN, MARGIN, CONTENT, PAGE_H - 2*MARGIN, id="title")
-fn = "BioKissed_SA_Price_Schedule_Internal.pdf" if INTERNAL else "BioKissed_SA_Price_List.pdf"
+fn = ("BioKissed_SA_Reseller_Price_Schedule.pdf" if RESELLER
+      else "BioKissed_SA_Price_Schedule_Internal.pdf" if INTERNAL
+      else "BioKissed_SA_Price_List.pdf")
 doc = BaseDocTemplate(os.path.join(ROOT, fn), pagesize=A4,
     title="BioKissed SA — Research Compound Price Schedule", author="BioKissed SA")
 doc.addPageTemplates([

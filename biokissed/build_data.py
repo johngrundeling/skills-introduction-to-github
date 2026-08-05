@@ -29,6 +29,8 @@ CAT_SUB = {
     "7. Options & Delivery": "Cold-chain packaging and courier options added at checkout.",
 }
 
+FEE_SKUS = {"DLL", "DLN", "ICE", "TBG"}   # Options & Delivery — pass-through fees
+
 def clean_name(product_name):
     return product_name.split(" - ", 1)[-1].strip()
 
@@ -98,8 +100,38 @@ def write_grouped(rows):
     print("wrote _bk_data.json groups:", len(groups), "items:", sum(len(g["items"]) for g in groups))
     return groups
 
+RESELLER_MARKUP = 1.25   # reseller price = retail + 25%
+
+def reseller_price(r):
+    # Options & Delivery are pass-through fees — left unchanged.
+    if r["_code"] in FEE_SKUS:
+        return r["_price"]
+    try:
+        v = float(r["Price"])
+    except ValueError:
+        return "POA"
+    if v <= 0:
+        return "Free" if r["_code"] == "BAC" else "POA"
+    return "R" + f"{round(v * RESELLER_MARKUP):,.0f}"
+
+def write_reseller(rows):
+    groups, seen = [], {}
+    for r in rows:
+        cat = CAT_SHORT.get(r["Category"], r["Category"])
+        if cat not in seen:
+            seen[cat] = {"category": cat, "sub": CAT_SUB.get(r["Category"], ""), "items": []}
+            groups.append(seen[cat])
+        seen[cat]["items"].append({
+            "code": r["_code"], "name": r["_name"], "desc": r["Description"],
+            "price": reseller_price(r), "img": f"biokissed/images_thumb/{r['_code']}.png",
+        })
+    json.dump(groups, open(os.path.join(ROOT, "_bk_reseller_data.json"), "w"), indent=1)
+    print("wrote _bk_reseller_data.json (retail +25%)")
+    return groups
+
 if __name__ == "__main__":
     rows = load()
     write_master(rows)
     write_ghl(rows)
     write_grouped(rows)
+    write_reseller(rows)
