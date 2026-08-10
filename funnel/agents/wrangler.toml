@@ -1,0 +1,24 @@
+# Reconciliation Agent — standalone scheduled Worker.
+# Deploy from this folder:  npx wrangler deploy
+# Secrets:  npx wrangler secret put PAYSTACK_SECRET_KEY
+#           npx wrangler secret put GHL_API_TOKEN
+name = "biokissed-reconcile"
+main = "reconcile.worker.js"
+compatibility_date = "2024-11-01"
+
+# Runs every 30 minutes
+[triggers]
+crons = ["*/30 * * * *"]
+
+# D1 ledger (biokissed-orders)
+[[d1_databases]]
+binding = "DB"
+database_name = "biokissed-orders"
+database_id = "a02ffd09-0bca-4787-ab7d-1219a7b6c5d8"
+
+# Non-secret vars (set the real BioKissed values before deploy).
+# PAYSTACK_SECRET_KEY and GHL_API_TOKEN are SECRETS — set with `wrangler secret put`, not here.
+[vars]
+GHL_LOCATION_ID = "fktk4QrXVBq8Y3MojJRz"                  # BioKissed SA
+GHL_PIPELINE_ID = "0Ntnfu1vMFOriKKV9tr3"                  # "BioKissed SA - Sales Pipeline"
+GHL_STAGE_ID    = "dea558df-5a9c-483a-b7b1-5156be62a70a"  # stage "Won" (paid orders land here)
