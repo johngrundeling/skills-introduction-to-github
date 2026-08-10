@@ -100,6 +100,41 @@
     "desc": "A growth-hormone-releasing hormone analogue that signals the pituitary to release growth hormone naturally; studied for recovery, body composition and sleep.",
     "price": "R1,075",
     "img": "biokissed/images_thumb/SRM10.png"
+   },
+   {
+    "code": "BPC10P",
+    "name": "BPC-157 10mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. Promotes blood-vessel formation, reduces inflammation and protects cells from damage \u2014 studied to speed the healing response in soft tissue, gut lining and joints.",
+    "price": "R1,125",
+    "img": "biokissed/images_thumb/BPC10P.png"
+   },
+   {
+    "code": "CJIPP",
+    "name": "CJC-1295 + Ipamorelin Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. CJC-1295 extends how long each natural growth-hormone pulse lasts while Ipamorelin adds extra pulses, together creating a sustained increase in natural GH release \u2014 researched for recovery, body composition and sleep quality.",
+    "price": "R1,375",
+    "img": "biokissed/images_thumb/CJIPP.png"
+   },
+   {
+    "code": "DSP10P",
+    "name": "DSIP 10mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. Crosses the blood-brain barrier and interacts with the central nervous system to promote delta-wave (deep, restorative) sleep \u2014 a key subject in sleep-cycle research.",
+    "price": "R1,325",
+    "img": "biokissed/images_thumb/DSP10P.png"
+   },
+   {
+    "code": "KPV10P",
+    "name": "KPV 10mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. A tripeptide fragment of alpha-MSH studied for its anti-inflammatory action in the gut and skin and for supporting tissue healing.",
+    "price": "R1,025",
+    "img": "biokissed/images_thumb/KPV10P.png"
+   },
+   {
+    "code": "TB10P",
+    "name": "TB-500 10mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. Promotes migration of stem cells to injured areas, helps form new blood vessels, reduces inflammation and prevents excessive scar tissue; often studied alongside BPC-157 for combined soft-tissue recovery.",
+    "price": "R1,425",
+    "img": "biokissed/images_thumb/TB10P.png"
    }
   ]
  },
@@ -251,14 +286,14 @@
     "code": "SG30",
     "name": "Semaglutide 30mg",
     "desc": "A GLP-1 receptor agonist studied for glucose-dependent insulin secretion, appetite suppression and slowed gastric emptying.",
-    "price": "POA",
+    "price": "R1,175",
     "img": "biokissed/images_thumb/SG30.png"
    },
    {
     "code": "SLU5",
     "name": "SLU-PP-332 5mg",
     "desc": "An ERR agonist ('exercise mimetic') studied for its potential to increase energy expenditure and fat oxidation without physical exertion.",
-    "price": "POA",
+    "price": "R775",
     "img": "biokissed/images_thumb/SLU5.png"
    },
    {
@@ -281,6 +316,27 @@
     "desc": "Investigated for its potential to support glucose-dependent insulin secretion, appetite regulation and gastric-emptying pathways.",
     "price": "R1,875",
     "img": "biokissed/images_thumb/TZ60.png"
+   },
+   {
+    "code": "NAD1000P",
+    "name": "NAD+ 1000mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. Acts as a helper molecule in hundreds of metabolic processes, especially mitochondrial energy production; elevated NAD+ is studied for cellular energy and repair pathways central to longevity research.",
+    "price": "R1,625",
+    "img": "biokissed/images_thumb/NAD1000P.png"
+   },
+   {
+    "code": "SG30P",
+    "name": "Semaglutide 30mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. A GLP-1 receptor agonist studied for glucose-dependent insulin secretion, appetite suppression and slowed gastric emptying.",
+    "price": "R1,525",
+    "img": "biokissed/images_thumb/SG30P.png"
+   },
+   {
+    "code": "TZ60P",
+    "name": "Tirzepatide 60mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. Investigated for its potential to support glucose-dependent insulin secretion, appetite regulation and gastric-emptying pathways.",
+    "price": "R2,225",
+    "img": "biokissed/images_thumb/TZ60P.png"
    }
   ]
  },
@@ -357,6 +413,13 @@
     "desc": "The body's master antioxidant, studied for its role in cellular detoxification, oxidative-stress defence and skin brightening.",
     "price": "R675",
     "img": "biokissed/images_thumb/GLU600.png"
+   },
+   {
+    "code": "EP50P",
+    "name": "Epithalon 50mg Research Pen",
+    "desc": "Reconstituted research-pen format for convenient, pre-measured dosing. Activates telomerase to help lengthen telomeres and slow cellular ageing, and regulates melatonin production \u2014 linked to circadian and longevity research.",
+    "price": "R1,525",
+    "img": "biokissed/images_thumb/EP50P.png"
    }
   ]
  },
@@ -466,6 +529,13 @@
     "desc": "Single-use pen device for convenient reconstitution and measured delivery of research compounds.",
     "price": "R526",
     "img": "biokissed/images_thumb/DPN.png"
+   },
+   {
+    "code": "BAC3",
+    "name": "Bacteriostatic Water 3ml",
+    "desc": "Sterile water containing a small amount of benzyl alcohol, used to reconstitute freeze-dried peptides prior to research use. Not a peptide \u2014 an essential laboratory consumable.",
+    "price": "R276",
+    "img": "biokissed/images_thumb/BAC3.png"
    }
   ]
  },
